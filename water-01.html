@@ -112,7 +112,7 @@ nav.pn span{visibility:hidden}
 
   <article>
     <p>절수 수도꼭지는 물을 덜 쓰도록 만든 수도꼭지입니다. 수도꼭지 끝에 &#x27;포말기&#x27;라는 작은 부품을 끼우는데, 포말기 안의 고운 그물망을 지나면서 물에 공기 방울이 섞입니다. 그래서 물줄기는 부드럽고 풍성해 보이지만 실제로 나오는 물의 양은 줄어듭니다. 우리나라 법에서는 1분 동안 나오는 물이 6L 이하인 수도꼭지를 절수 수도꼭지로 정하고 있습니다.</p>
-    <figure><div class="ph" data-photo="images/water-01"><span>사진 자리<br>포말기를 끼운 수도꼭지</span></div><figcaption>포말기를 끼운 수도꼭지</figcaption></figure>
+    <figure><div class="ph" data-photo="images/water-01" data-remote="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/New_and_old_faucet_aerator.JPG/960px-New_and_old_faucet_aerator.JPG"><span>사진 자리<br>포말기를 끼운 수도꼭지</span></div><figcaption>포말기를 끼운 수도꼭지</figcaption></figure>
     <p>손을 씻거나 설거지를 할 때 특별히 애쓰지 않아도 저절로 물이 절약된다는 점이 가장 큰 장점입니다. 부품이 작고 값이 싸서 이미 있는 수도꼭지에 끼우기만 하면 되므로, 학교 세면대처럼 많은 사람이 쓰는 곳일수록 효과가 커집니다.</p>
     <p>우리 학교 수도꼭지가 절수 수도꼭지인지 직접 확인해 볼 수도 있습니다. 수도꼭지를 끝까지 틀고 10초 동안 나오는 물을 계량컵에 받은 뒤, 그 양에 6을 곱하면 1분 동안 나오는 물의 양이 됩니다. 이 값이 6L를 넘는다면 아직 절수 수도꼭지가 아닌 셈입니다. 다만 물줄기를 무작정 가늘게 하면 손을 오래 씻느라 오히려 물을 더 쓰게 될 수도 있습니다. 그래서 물의 양만 줄이는 것이 아니라 적은 물로도 잘 씻기게 만드는 것이 절수 수도꼭지 기술의 핵심입니다.</p>
   </article>
@@ -202,7 +202,7 @@ document.querySelectorAll(".ph[data-photo]").forEach(box=>{
   const base=box.dataset.photo, exts=["jpg","jpeg","png","webp","JPG"]; let i=0;
   const img=new Image(); img.alt=box.textContent.replace("사진 자리","").trim();
   img.onload=()=>{ box.classList.add("has"); box.replaceChildren(img); };
-  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
+  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; else if(i===exts.length&&box.dataset.remote) img.src=box.dataset.remote; };
   img.src=base+"."+exts[0];
 });
 </script>

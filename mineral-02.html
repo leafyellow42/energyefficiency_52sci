@@ -112,14 +112,14 @@ nav.pn span{visibility:hidden}
 
   <article>
     <p>충전식 건전지는 다 쓴 뒤 충전기에 꽂아 다시 쓸 수 있는 건전지입니다. 보통 건전지는 안에 든 물질이 화학 반응을 하며 전기를 만들고, 반응이 끝나면 되돌릴 수 없습니다. 충전식 건전지는 전기를 넣어 주면 이 반응이 거꾸로 일어나 다시 전기를 낼 수 있는 상태로 돌아갑니다.</p>
-    <figure><div class="ph" data-photo="images/mineral-02"><span>사진 자리<br>AA 충전지와 충전기</span></div><figcaption>AA 충전지와 충전기</figcaption></figure>
+    <figure><div class="ph" data-photo="images/mineral-02" data-remote="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Eneloop_AA_ja_on_charger.jpg/960px-Eneloop_AA_ja_on_charger.jpg"><span>사진 자리<br>AA 충전지와 충전기</span></div><figcaption>AA 충전지와 충전기<br><small>사진: D.328 · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Eneloop_AA_ja_on_charger.jpg" target="_blank" rel="noopener">위키미디어 공용</a></small></figcaption></figure>
     <p>충전식 건전지 하나는 보통 수백 번 이상 다시 쓸 수 있습니다. 그만큼 건전지를 만드는 데 드는 아연, 니켈 같은 금속을 아끼고, 버려지는 폐건전지도 크게 줄일 수 있습니다. 리모컨, 무선 마우스, 장난감처럼 건전지를 자주 바꾸는 물건에 쓰면 효과가 큽니다.</p>
     <p>처음에는 충전기와 건전지를 사는 데 돈이 더 듭니다. 또 충전식 건전지는 전압이 보통 건전지(1.5V)보다 조금 낮은 1.2V여서, 일부 기기에서는 잘 맞지 않을 수 있습니다. 오래 쓰지 않으면 저절로 전기가 조금씩 빠져나가고, 수명이 다하면 일반 쓰레기가 아니라 폐건전지 수거함에 넣어야 합니다.</p>
   </article>
 
   <h2 class="sec">사진으로 더 보기</h2>
   <p class="note">이 주제는 알맞은 영상이 없어 사진 자료로 대신합니다.</p>
-  <figure><div class="ph" data-photo="images/mineral-02-2"><span>사진 자리<br>AA 충전지와 충전기 (가까이서 본 모습)</span></div><figcaption>AA 충전지와 충전기 (가까이서 본 모습)</figcaption></figure>
+  <figure><div class="ph" data-photo="images/mineral-02-2" data-remote=""><span>사진 자리<br>AA 충전지와 충전기 (가까이서 본 모습)</span></div><figcaption>AA 충전지와 충전기 (가까이서 본 모습)</figcaption></figure>
 
   <h2 class="sec">낱말 풀이</h2>
   <div class="gloss"><dl>
@@ -200,7 +200,7 @@ document.querySelectorAll(".ph[data-photo]").forEach(box=>{
   const base=box.dataset.photo, exts=["jpg","jpeg","png","webp","JPG"]; let i=0;
   const img=new Image(); img.alt=box.textContent.replace("사진 자리","").trim();
   img.onload=()=>{ box.classList.add("has"); box.replaceChildren(img); };
-  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
+  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; else if(i===exts.length&&box.dataset.remote) img.src=box.dataset.remote; };
   img.src=base+"."+exts[0];
 });
 </script>

@@ -112,7 +112,7 @@ nav.pn span{visibility:hidden}
 
   <article>
     <p>빗물 저금통은 지붕에 내린 빗물을 모아 두는 통입니다. 지붕의 빗물은 &#x27;홈통&#x27;이라는 관을 타고 내려오는데, 이 홈통을 저금통에 연결해 빗물을 모읍니다. 비가 1mm만 내려도 넓이 100㎡인 지붕에는 100L의 빗물이 모입니다. 생각보다 많은 양이지요?</p>
-    <figure><div class="ph" data-photo="images/water-03"><span>사진 자리<br>건물 홈통에 연결한 빗물 저금통</span></div><figcaption>건물 홈통에 연결한 빗물 저금통</figcaption></figure>
+    <figure><div class="ph" data-photo="images/water-03" data-remote="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/20140530-AMS-LSC-9001_-_Peoples_Garden_-_Rain_Barrel_%2815498316125%29.jpg/960px-20140530-AMS-LSC-9001_-_Peoples_Garden_-_Rain_Barrel_%2815498316125%29.jpg"><span>사진 자리<br>건물 홈통에 연결한 빗물 저금통</span></div><figcaption>건물 홈통에 연결한 빗물 저금통</figcaption></figure>
     <p>우리나라는 한 해에 내리는 비의 절반 이상이 여름에 몰려 있습니다. 여름에 빗물을 모아 두면 화단과 텃밭에 물을 주거나 마당과 자동차를 청소할 때 수돗물 대신 쓸 수 있습니다. 비가 많이 올 때 빗물이 한꺼번에 하수도로 몰리는 것을 조금 늦춰 주는 역할도 합니다.</p>
     <p>빗물 저금통에는 &#x27;처음 내린 빗물&#x27;을 따로 흘려보내는 장치를 달기도 합니다. 비가 오기 시작할 때의 빗물에는 지붕과 공기 중에 쌓여 있던 먼지가 많이 섞여 있고, 조금 지나면 훨씬 깨끗해지기 때문입니다. 그래도 모은 빗물은 마시거나 요리하는 데 쓰지 않습니다. 고인 물에 모기가 알을 낳지 못하도록 뚜껑과 그물망을 달고, 모은 물은 오래 두지 말고 자주 쓰는 것이 좋습니다.</p>
   </article>
@@ -202,7 +202,7 @@ document.querySelectorAll(".ph[data-photo]").forEach(box=>{
   const base=box.dataset.photo, exts=["jpg","jpeg","png","webp","JPG"]; let i=0;
   const img=new Image(); img.alt=box.textContent.replace("사진 자리","").trim();
   img.onload=()=>{ box.classList.add("has"); box.replaceChildren(img); };
-  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
+  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; else if(i===exts.length&&box.dataset.remote) img.src=box.dataset.remote; };
   img.src=base+"."+exts[0];
 });
 </script>
