@@ -265,5 +265,30 @@ document.querySelectorAll(".ph[data-photo]").forEach(box=>{
   show(0);
 })();
 </script>
+<script>
+/* pixel mosaic: card -> place */
+const Mosaic={
+  make(){ const c=document.createElement("canvas"), W=innerWidth, H=innerHeight, B=Math.max(28,Math.round(Math.min(W,H)/16));
+    c.width=W; c.height=H; c.className="mosaic"; c.style.cssText="position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:999;pointer-events:none";
+    document.body.appendChild(c); const cells=[]; for(let y=0;y<H;y+=B)for(let x=0;x<W;x+=B)cells.push([x,y]);
+    for(let i=cells.length-1;i>0;i--){const j=Math.random()*(i+1)|0; [cells[i],cells[j]]=[cells[j],cells[i]];}
+    return {c,g:c.getContext("2d"),cells,B}; },
+  col(){ return getComputedStyle(document.documentElement).getPropertyValue("--sky").trim()||"#dfeef2"; },
+  run(m,fill,done){ const N=8, per=Math.ceil(m.cells.length/N), col=this.col(), shade=["#ffffff","#c9e2ec"]; let k=0;
+    const t=setInterval(()=>{ for(const [x,y] of m.cells.slice(k*per,(k+1)*per)){
+        if(fill){ m.g.fillStyle=col; m.g.fillRect(x,y,m.B,m.B); } else m.g.clearRect(x,y,m.B,m.B); }
+      // a few sparkling blocks on the moving edge for a pixel feel
+      if(k<N-1) for(const [x,y] of m.cells.slice((k+1)*per,(k+1)*per+Math.ceil(per/3))){ m.g.fillStyle=shade[(x+y)/m.B%2|0]; m.g.fillRect(x,y,m.B,m.B); }
+      if(++k>=N){ clearInterval(t); done&&done(); } },45); }
+};
+</script>
+<script>
+(function(){ const a=document.querySelector(".nb-back"); if(!a) return;
+  a.addEventListener("click",e=>{ if(matchMedia("(prefers-reduced-motion: reduce)").matches||e.metaKey||e.ctrlKey||e.shiftKey||e.button!==0) return;
+    e.preventDefault(); const m=Mosaic.make(), to=a.getAttribute("href").replace("./#","./?m#");
+    Mosaic.run(m,true,()=>{ m.g.fillStyle=Mosaic.col(); m.g.fillRect(0,0,m.c.width,m.c.height); location.href=to; }); });
+  addEventListener("pageshow",e=>{ if(e.persisted) document.querySelectorAll("canvas.mosaic").forEach(c=>c.remove()); });
+})();
+</script>
 </body>
 </html>

@@ -102,6 +102,28 @@ canvas{position:absolute; image-rendering:pixelated; image-rendering:crisp-edges
   <a class="hits" href="https://hits.sh/leafyellow42.github.io/energyefficiency_52sci/" target="_blank" rel="noopener" aria-label="방문자 수"><img alt="방문자 수" src="https://hits.sh/leafyellow42.github.io/energyefficiency_52sci.svg?style=flat-square&amp;label=%EB%B0%A9%EB%AC%B8%EC%9E%90&amp;color=ffffff&amp;labelColor=ffffff"></a>
 </div>
 
+<script>
+/* pixel mosaic: card -> place */
+const Mosaic={
+  make(){ const c=document.createElement("canvas"), W=innerWidth, H=innerHeight, B=Math.max(28,Math.round(Math.min(W,H)/16));
+    c.width=W; c.height=H; c.className="mosaic"; c.style.cssText="position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:999;pointer-events:none";
+    document.body.appendChild(c); const cells=[]; for(let y=0;y<H;y+=B)for(let x=0;x<W;x+=B)cells.push([x,y]);
+    for(let i=cells.length-1;i>0;i--){const j=Math.random()*(i+1)|0; [cells[i],cells[j]]=[cells[j],cells[i]];}
+    return {c,g:c.getContext("2d"),cells,B}; },
+  col(){ return getComputedStyle(document.documentElement).getPropertyValue("--sky").trim()||"#dfeef2"; },
+  run(m,fill,done){ const N=8, per=Math.ceil(m.cells.length/N), col=this.col(), shade=["#ffffff","#c9e2ec"]; let k=0;
+    const t=setInterval(()=>{ for(const [x,y] of m.cells.slice(k*per,(k+1)*per)){
+        if(fill){ m.g.fillStyle=col; m.g.fillRect(x,y,m.B,m.B); } else m.g.clearRect(x,y,m.B,m.B); }
+      // a few sparkling blocks on the moving edge for a pixel feel
+      if(k<N-1) for(const [x,y] of m.cells.slice((k+1)*per,(k+1)*per+Math.ceil(per/3))){ m.g.fillStyle=shade[(x+y)/m.B%2|0]; m.g.fillRect(x,y,m.B,m.B); }
+      if(++k>=N){ clearInterval(t); done&&done(); } },45); }
+};
+</script>
+<script>
+/* arriving from a card: start covered, dissolve after drawing */
+window.__mosaicIn=/[?&]m(&|$)/.test(location.search)&&!matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(/[?&]m(&|$)/.test(location.search)){ try{history.replaceState(null,"",location.pathname+location.hash);}catch(e){} }
+</script>
 <script src="village.js"></script>
 <script>
 const V=window.Village;
@@ -255,7 +277,9 @@ document.getElementById("list").addEventListener("click",e=>{const b=e.target.cl
 
 drawMapView();
 const h0=location.hash.slice(1);
+if(window.__mosaicIn){ const m=Mosaic.make(); m.g.fillStyle=Mosaic.col(); m.g.fillRect(0,0,m.c.width,m.c.height); window.__mz=m; }
 show(V.SCENES[h0]?h0:"map");
+if(window.__mz){ const m=window.__mz; setTimeout(()=>Mosaic.run(m,false,()=>m.c.remove()),60); }
 addEventListener("resize",fit);
 const still=matchMedia("(prefers-reduced-motion: reduce)");
 let last=0; (function loop(ts){ requestAnimationFrame(loop); if(still.matches||cur!=="map"||document.hidden) return; if(ts-last<110) return; last=ts; ANIM.step(); ANIM.draw(); })(0);
