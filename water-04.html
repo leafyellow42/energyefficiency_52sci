@@ -93,6 +93,25 @@ nav.pn span{visibility:hidden}
   .where .scene{width:120px}
   header.h .icon{width:64px; height:64px}
 }
+/* photo + infographic slider */
+.gal{margin:24px 0 8px}
+.gwrap{position:relative}
+.gv{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; border:2px solid var(--line); background:var(--tile); aspect-ratio:3/2; scrollbar-width:none; outline:none}
+.gv::-webkit-scrollbar{display:none}
+.gv:focus-visible{outline:3px solid var(--acc); outline-offset:2px}
+.gv .slide{flex:0 0 100%; scroll-snap-align:start; display:flex; align-items:center; justify-content:center; background:#fff}
+.gv img{width:100%; height:100%; object-fit:contain; display:block}
+.gnav{position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; border:2px solid var(--line); background:var(--paper); color:var(--ink); font:800 26px/1 "Gothic A1",sans-serif; cursor:pointer; padding:0 0 4px}
+.gnav:hover{background:var(--tile)}
+.gnav[disabled]{opacity:0; pointer-events:none}
+.gprev{left:8px} .gnext{right:8px}
+.thumbs{display:flex; gap:10px; justify-content:center; margin-top:10px}
+.thumbs button{width:84px; aspect-ratio:3/2; padding:0; border:2px solid var(--road); background:#fff; cursor:pointer; opacity:.55}
+.thumbs button[aria-current="true"]{border:3px solid var(--acc); opacity:1}
+.thumbs img{width:100%; height:100%; object-fit:cover; display:block}
+.gcap{text-align:center}
+.gcap b{color:var(--ink); margin-right:6px}
+@media (prefers-reduced-motion:reduce){.gv{scroll-behavior:auto}}
 .note{font-size:15px; color:var(--sub); margin:0 0 12px}
 </style>
 </head>
@@ -111,8 +130,22 @@ nav.pn span{visibility:hidden}
   </header>
 
   <article>
+    <figure class="gal" id="gal">
+      <div class="gwrap">
+        <div class="gv" tabindex="0" aria-label="사진과 그림 넘겨 보기">
+          <div class="slide"><img src="images/water-04.jpg" alt="&#x27;마시지 마시오&#x27; 표시가 붙은 중수도 관"></div>
+          <div class="slide"><img src="images/water-04-info.jpg" alt="그림으로 보는 중수도" loading="lazy"></div>
+        </div>
+        <button class="gnav gprev" type="button" aria-label="이전">‹</button>
+        <button class="gnav gnext" type="button" aria-label="다음">›</button>
+      </div>
+      <div class="thumbs">
+        <button type="button" aria-current="true" aria-label="사진 보기"><img src="images/water-04.jpg" alt=""></button>
+        <button type="button" aria-label="그림 설명 보기"><img src="images/water-04-info.jpg" alt=""></button>
+      </div>
+      <figcaption class="gcap" data-caps="&#x27;마시지 마시오&#x27; 표시가 붙은 중수도 관|그림으로 보는 중수도"><b>1 / 2</b> &#x27;마시지 마시오&#x27; 표시가 붙은 중수도 관</figcaption>
+    </figure>
     <p>중수도는 한 번 쓴 물을 깨끗하게 처리해 다시 쓰는 시설입니다. 마시는 물을 보내는 &#x27;상수도&#x27;와 쓴 물을 내보내는 &#x27;하수도&#x27;의 중간이라는 뜻입니다.</p>
-    <figure><div class="ph" data-photo="images/water-04"><span>사진 자리<br>&#x27;마시지 마시오&#x27; 표시가 붙은 중수도 관</span></div><figcaption>&#x27;마시지 마시오&#x27; 표시가 붙은 중수도 관</figcaption></figure>
     <p>세면대나 샤워실에서 쓴 물을 걸러 소독한 뒤 변기 물, 청소 물, 나무에 주는 물로 씁니다. 그래서 물을 많이 쓰는 큰 건물에는 이런 시설을 갖추도록 법으로 정해 두었습니다.</p>
     <p>중수도 물은 마시면 안 되므로 수돗물 관과 따로 깔고 &#x27;마시지 마시오&#x27; 표시를 해 둡니다. 설치와 관리에 돈이 들어 큰 건물에 알맞은 방법입니다.</p>
   </article>
@@ -124,9 +157,6 @@ nav.pn span{visibility:hidden}
     <div><dt>하수처리장</dt><dd>쓰고 난 물을 모아 깨끗하게 처리하는 곳.</dd></div>
     <div><dt>소독</dt><dd>병을 일으키는 작은 생물을 없애는 일.</dd></div>
   </dl></div>
-
-  <h2 class="sec">출처</h2>
-  <ul class="src"><li>출처는 사진을 넣을 때 기관·언론 자료로 함께 정리합니다.</li></ul>
 
   <nav class="pn">
     <span></span>
@@ -200,6 +230,23 @@ document.querySelectorAll(".ph[data-photo]").forEach(box=>{
   img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
   img.src=base+"."+exts[0];
 });
+</script>
+<script>
+(function(){
+  const g=document.getElementById('gal'); if(!g) return;
+  const v=g.querySelector('.gv'), th=[...g.querySelectorAll('.thumbs button')], cap=g.querySelector('.gcap'),
+        caps=cap.dataset.caps.split('|'), pv=g.querySelector('.gprev'), nx=g.querySelector('.gnext'), n=th.length;
+  let cur=0;
+  function show(i){ cur=i; th.forEach((b,k)=>b.setAttribute('aria-current', k===i?'true':'false'));
+    cap.innerHTML='<b>'+(i+1)+' / '+n+'</b> '+caps[i]; pv.disabled=i===0; nx.disabled=i===n-1; }
+  function go(i){ i=Math.max(0,Math.min(n-1,i)); v.scrollTo({left:i*v.clientWidth}); show(i); }
+  v.addEventListener('scroll',()=>{ const i=Math.round(v.scrollLeft/v.clientWidth); if(i!==cur) show(i); },{passive:true});
+  th.forEach((b,k)=>b.addEventListener('click',()=>go(k)));
+  pv.addEventListener('click',()=>go(cur-1)); nx.addEventListener('click',()=>go(cur+1));
+  v.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){go(cur+1);e.preventDefault()} if(e.key==='ArrowLeft'){go(cur-1);e.preventDefault()} });
+  addEventListener('resize',()=>{ v.style.scrollBehavior='auto'; v.scrollLeft=cur*v.clientWidth; v.style.scrollBehavior=''; });
+  show(0);
+})();
 </script>
 </body>
 </html>

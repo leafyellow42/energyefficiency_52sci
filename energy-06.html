@@ -93,6 +93,25 @@ nav.pn span{visibility:hidden}
   .where .scene{width:120px}
   header.h .icon{width:64px; height:64px}
 }
+/* photo + infographic slider */
+.gal{margin:24px 0 8px}
+.gwrap{position:relative}
+.gv{display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; border:2px solid var(--line); background:var(--tile); aspect-ratio:3/2; scrollbar-width:none; outline:none}
+.gv::-webkit-scrollbar{display:none}
+.gv:focus-visible{outline:3px solid var(--acc); outline-offset:2px}
+.gv .slide{flex:0 0 100%; scroll-snap-align:start; display:flex; align-items:center; justify-content:center; background:#fff}
+.gv img{width:100%; height:100%; object-fit:contain; display:block}
+.gnav{position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; border:2px solid var(--line); background:var(--paper); color:var(--ink); font:800 26px/1 "Gothic A1",sans-serif; cursor:pointer; padding:0 0 4px}
+.gnav:hover{background:var(--tile)}
+.gnav[disabled]{opacity:0; pointer-events:none}
+.gprev{left:8px} .gnext{right:8px}
+.thumbs{display:flex; gap:10px; justify-content:center; margin-top:10px}
+.thumbs button{width:84px; aspect-ratio:3/2; padding:0; border:2px solid var(--road); background:#fff; cursor:pointer; opacity:.55}
+.thumbs button[aria-current="true"]{border:3px solid var(--acc); opacity:1}
+.thumbs img{width:100%; height:100%; object-fit:cover; display:block}
+.gcap{text-align:center}
+.gcap b{color:var(--ink); margin-right:6px}
+@media (prefers-reduced-motion:reduce){.gv{scroll-behavior:auto}}
 .note{font-size:15px; color:var(--sub); margin:0 0 12px}
 </style>
 </head>
@@ -111,8 +130,22 @@ nav.pn span{visibility:hidden}
   </header>
 
   <article>
+    <figure class="gal" id="gal">
+      <div class="gwrap">
+        <div class="gv" tabindex="0" aria-label="사진과 그림 넘겨 보기">
+          <div class="slide"><img src="images/energy-06.jpg" alt="유리창에 붙인 단열 에어캡"></div>
+          <div class="slide"><img src="images/energy-06-info.jpg" alt="그림으로 보는 단열 에어캡(뽁뽁이)" loading="lazy"></div>
+        </div>
+        <button class="gnav gprev" type="button" aria-label="이전">‹</button>
+        <button class="gnav gnext" type="button" aria-label="다음">›</button>
+      </div>
+      <div class="thumbs">
+        <button type="button" aria-current="true" aria-label="사진 보기"><img src="images/energy-06.jpg" alt=""></button>
+        <button type="button" aria-label="그림 설명 보기"><img src="images/energy-06-info.jpg" alt=""></button>
+      </div>
+      <figcaption class="gcap" data-caps="유리창에 붙인 단열 에어캡|그림으로 보는 단열 에어캡(뽁뽁이)"><b>1 / 2</b> 유리창에 붙인 단열 에어캡</figcaption>
+    </figure>
     <p>단열 에어캡은 공기 방울이 촘촘히 든 비닐로, 흔히 &#x27;뽁뽁이&#x27;라고 부릅니다. 공기는 열을 잘 전달하지 않아서 유리창에 붙이면 방의 열이 빠져나가는 것을 막아 줍니다.</p>
-    <figure><div class="ph" data-photo="images/energy-06"><span>사진 자리<br>유리창에 붙인 단열 에어캡</span></div><figcaption>유리창에 붙인 단열 에어캡</figcaption></figure>
     <p>창문은 집에서 열이 많이 빠져나가는 곳입니다. 물을 뿌리고 붙이기만 하면 되어 적은 돈으로 난방 에너지를 아낄 수 있습니다.</p>
     <p>다만 빛도 덜 들어오니, 낮에 햇빛이 방을 데워 주는 남쪽 창까지 모두 덮는 것이 좋은지 고민해 볼 만합니다.</p>
   </article>
@@ -129,9 +162,6 @@ nav.pn span{visibility:hidden}
     <div><dt>이중창</dt><dd>유리를 두 겹으로 만들어 사이에 공기층을 둔 창문.</dd></div>
     <div><dt>결로</dt><dd>차가운 면에 공기 속 수증기가 물방울로 맺히는 현상.</dd></div>
   </dl></div>
-
-  <h2 class="sec">출처</h2>
-  <ul class="src"><li>출처는 사진을 넣을 때 기관·언론 자료로 함께 정리합니다.</li></ul>
 
   <nav class="pn">
     <a class="prev" href="energy-05.html"><small>이전 카드</small>← 스마트 플러그로 대기 전력 줄이기</a>
@@ -205,6 +235,23 @@ document.querySelectorAll(".ph[data-photo]").forEach(box=>{
   img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
   img.src=base+"."+exts[0];
 });
+</script>
+<script>
+(function(){
+  const g=document.getElementById('gal'); if(!g) return;
+  const v=g.querySelector('.gv'), th=[...g.querySelectorAll('.thumbs button')], cap=g.querySelector('.gcap'),
+        caps=cap.dataset.caps.split('|'), pv=g.querySelector('.gprev'), nx=g.querySelector('.gnext'), n=th.length;
+  let cur=0;
+  function show(i){ cur=i; th.forEach((b,k)=>b.setAttribute('aria-current', k===i?'true':'false'));
+    cap.innerHTML='<b>'+(i+1)+' / '+n+'</b> '+caps[i]; pv.disabled=i===0; nx.disabled=i===n-1; }
+  function go(i){ i=Math.max(0,Math.min(n-1,i)); v.scrollTo({left:i*v.clientWidth}); show(i); }
+  v.addEventListener('scroll',()=>{ const i=Math.round(v.scrollLeft/v.clientWidth); if(i!==cur) show(i); },{passive:true});
+  th.forEach((b,k)=>b.addEventListener('click',()=>go(k)));
+  pv.addEventListener('click',()=>go(cur-1)); nx.addEventListener('click',()=>go(cur+1));
+  v.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){go(cur+1);e.preventDefault()} if(e.key==='ArrowLeft'){go(cur-1);e.preventDefault()} });
+  addEventListener('resize',()=>{ v.style.scrollBehavior='auto'; v.scrollLeft=cur*v.clientWidth; v.style.scrollBehavior=''; });
+  show(0);
+})();
 </script>
 </body>
 </html>
