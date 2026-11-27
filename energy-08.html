@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>바깥 차양</title>
+<title>창문 바깥에 차양 달기</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -107,12 +107,12 @@ nav.pn span{visibility:hidden}
 
   <header class="h">
     <div class="icon" id="icon"></div>
-    <div><p class="no">에너지 08</p><h1>바깥 차양</h1></div>
+    <div><p class="no">에너지 08</p><h1>창문 바깥에 차양 달기</h1></div>
   </header>
 
   <article>
     <p>바깥 차양은 창문 바깥에서 햇빛을 가리는 장치입니다. 창문 위로 펼치는 천 지붕, 창문 바깥에 단 블라인드, 창가에 키우는 덩굴 식물의 &#x27;초록 커튼&#x27; 등이 있습니다. 커튼을 창 안쪽에 치면 햇빛의 열은 이미 유리를 지나 집 안에 들어온 뒤지만, 바깥 차양은 햇빛이 유리에 닿기 전에 막아 줍니다.</p>
-    <figure><div class="ph" data-photo="images/energy-08" data-remote="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Au%C3%9Fenjalousien_vor_Glasfassade.jpg/960px-Au%C3%9Fenjalousien_vor_Glasfassade.jpg"><span>사진 자리<br>창문 바깥에 단 외부 블라인드</span></div><figcaption>창문 바깥에 단 외부 블라인드<br><small>사진: XDAS123 · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Au%C3%9Fenjalousien_vor_Glasfassade.jpg" target="_blank" rel="noopener">위키미디어 공용</a></small></figcaption></figure>
+    <figure><div class="ph" data-photo="images/energy-08"><span>사진 자리<br>창문 바깥에 단 외부 블라인드</span></div><figcaption>창문 바깥에 단 외부 블라인드</figcaption></figure>
     <p>그래서 같은 햇빛을 가려도 안쪽 커튼보다 방이 훨씬 덜 더워지고, 여름철 에어컨 전기를 아낄 수 있습니다. 우리 조상들도 이 원리를 알고 있었습니다. 한옥의 길게 나온 처마는 태양이 높이 뜨는 여름에는 햇빛을 가리고, 태양이 낮게 뜨는 겨울에는 햇빛이 방 안 깊숙이 들어오게 해 줍니다.</p>
     <p>덩굴 식물로 만든 초록 커튼은 여름에는 잎이 무성해 햇빛을 가리고, 겨울에는 잎이 져서 햇빛을 들여보내므로 계절에 맞게 저절로 역할을 바꿔 줍니다. 수세미, 나팔꽃, 여주처럼 빨리 자라는 한해살이 덩굴이 많이 쓰입니다. 천이나 블라인드로 된 바깥 차양은 겨울에 걷어 햇빛을 들이고, 바람이 센 날에는 접어 두어야 해서 계절과 날씨에 따라 관리하는 손길이 필요합니다.</p>
   </article>
@@ -134,8 +134,8 @@ nav.pn span{visibility:hidden}
   <ul class="src"><li>출처는 사진을 넣을 때 기관·언론 자료로 함께 정리합니다.</li></ul>
 
   <nav class="pn">
-    <a class="prev" href="water-04.html"><small>이전 카드</small>← 중수도</a>
-    <a class="next" href="energy-09.html"><small>다음 카드</small>옥상 녹화 →</a>
+    <a class="prev" href="water-04.html"><small>이전 카드</small>← 중수도로 물 다시 쓰기</a>
+    <a class="next" href="energy-09.html"><small>다음 카드</small>옥상에 식물 심기(옥상 녹화) →</a>
   </nav>
 </div>
 <script src="village.js"></script>
@@ -202,7 +202,7 @@ document.querySelectorAll(".ph[data-photo]").forEach(box=>{
   const base=box.dataset.photo, exts=["jpg","jpeg","png","webp","JPG"]; let i=0;
   const img=new Image(); img.alt=box.textContent.replace("사진 자리","").trim();
   img.onload=()=>{ box.classList.add("has"); box.replaceChildren(img); };
-  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; else if(i===exts.length&&box.dataset.remote) img.src=box.dataset.remote; };
+  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
   img.src=base+"."+exts[0];
 });
 </script>

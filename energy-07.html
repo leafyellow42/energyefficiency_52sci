@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>문풍지</title>
+<title>문틈에 문풍지 붙이기</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -107,12 +107,12 @@ nav.pn span{visibility:hidden}
 
   <header class="h">
     <div class="icon" id="icon"></div>
-    <div><p class="no">에너지 07</p><h1>문풍지</h1></div>
+    <div><p class="no">에너지 07</p><h1>문틈에 문풍지 붙이기</h1></div>
   </header>
 
   <article>
     <p>문풍지는 문이나 창문의 틈에 붙여 바람이 드나들지 못하게 막는 띠입니다. 옛날 한옥에서는 문의 틈에 한지를 붙여 문풍지로 썼고, 요즘은 스펀지, 고무, 털로 만든 것을 주로 씁니다. &#x27;문풍지 떠는 소리&#x27;라는 말은 겨울바람에 한지 문풍지가 떨리며 나는 소리를 뜻합니다.</p>
-    <figure><div class="ph" data-photo="images/energy-07" data-remote="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Coussin_-_bas_de_porte_001.jpg/960px-Coussin_-_bas_de_porte_001.jpg"><span>사진 자리<br>문틈에 붙인 문풍지</span></div><figcaption>문틈에 붙인 문풍지<br><small>사진: X-Javier · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Coussin_-_bas_de_porte_001.jpg" target="_blank" rel="noopener">위키미디어 공용</a></small></figcaption></figure>
+    <figure><div class="ph" data-photo="images/energy-07"><span>사진 자리<br>문틈에 붙인 문풍지</span></div><figcaption>문틈에 붙인 문풍지</figcaption></figure>
     <p>눈에 잘 보이지 않는 작은 틈이라도, 겨울에는 그 틈으로 찬 바람이 들어오고 따뜻한 공기가 계속 빠져나갑니다. 문풍지로 틈을 메우면 난방을 덜 해도 방이 따뜻하게 유지됩니다. 값이 싸고 붙이기 쉬워서 오늘이라도 바로 실천할 수 있습니다. 촛불이나 얇은 휴지를 문틈에 대 보며 흔들리는지 살펴보면 바람이 새는 곳을 찾을 수 있습니다.</p>
     <p>하지만 틈을 모두 막으면 실내 공기가 바뀌지 않아 이산화 탄소와 습기가 쌓이고, 곰팡이가 생기기 쉬워집니다. 그래서 문풍지를 붙였다면 하루에 몇 번은 창문을 활짝 열어 짧게 환기하는 것이 좋습니다.</p>
   </article>
@@ -134,7 +134,7 @@ nav.pn span{visibility:hidden}
   <ul class="src"><li>출처는 사진을 넣을 때 기관·언론 자료로 함께 정리합니다.</li></ul>
 
   <nav class="pn">
-    <a class="prev" href="energy-06.html"><small>이전 카드</small>← 단열 에어캡(뽁뽁이)</a>
+    <a class="prev" href="energy-06.html"><small>이전 카드</small>← 창문에 단열 에어캡 붙이기</a>
     <a class="next" href="energy-12.html"><small>다음 카드</small>냉장고 똑똑하게 쓰기 →</a>
   </nav>
 </div>
@@ -202,7 +202,7 @@ document.querySelectorAll(".ph[data-photo]").forEach(box=>{
   const base=box.dataset.photo, exts=["jpg","jpeg","png","webp","JPG"]; let i=0;
   const img=new Image(); img.alt=box.textContent.replace("사진 자리","").trim();
   img.onload=()=>{ box.classList.add("has"); box.replaceChildren(img); };
-  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; else if(i===exts.length&&box.dataset.remote) img.src=box.dataset.remote; };
+  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
   img.src=base+"."+exts[0];
 });
 </script>

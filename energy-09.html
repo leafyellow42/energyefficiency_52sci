@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>옥상 녹화</title>
+<title>옥상에 식물 심기(옥상 녹화)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -107,12 +107,12 @@ nav.pn span{visibility:hidden}
 
   <header class="h">
     <div class="icon" id="icon"></div>
-    <div><p class="no">에너지 09</p><h1>옥상 녹화</h1></div>
+    <div><p class="no">에너지 09</p><h1>옥상에 식물 심기(옥상 녹화)</h1></div>
   </header>
 
   <article>
     <p>옥상 녹화는 건물 옥상에 흙을 깔고 풀과 나무를 심어 정원처럼 꾸미는 것입니다. 여름에는 식물이 햇빛을 가려 주고, 잎에서 물이 수증기로 빠져나가는 &#x27;증산 작용&#x27;을 하면서 주변의 열을 빼앗아 시원하게 해 줍니다. 더운 날 나무 그늘이 유난히 시원한 것도 이 때문입니다. 겨울에는 흙과 식물이 두꺼운 이불처럼 건물의 열이 빠져나가는 것을 막아 줍니다.</p>
-    <figure><div class="ph" data-photo="images/energy-09" data-remote="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/20080708_Chicago_City_Hall_Green_Roof.JPG/960px-20080708_Chicago_City_Hall_Green_Roof.JPG"><span>사진 자리<br>풀과 나무를 심은 건물 옥상</span></div><figcaption>풀과 나무를 심은 건물 옥상<br><small>사진: TonyTheTiger · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:20080708_Chicago_City_Hall_Green_Roof.JPG" target="_blank" rel="noopener">위키미디어 공용</a></small></figcaption></figure>
+    <figure><div class="ph" data-photo="images/energy-09"><span>사진 자리<br>풀과 나무를 심은 건물 옥상</span></div><figcaption>풀과 나무를 심은 건물 옥상</figcaption></figure>
     <p>그래서 건물 꼭대기 층이 여름에는 시원하고 겨울에는 따뜻해져 냉방과 난방에 드는 에너지를 함께 아낄 수 있습니다. 흙이 빗물을 머금었다가 천천히 흘려보내 홍수를 줄이고, 도시의 열섬 현상을 줄이며, 새와 곤충이 쉬어 갈 수 있는 공간도 됩니다.</p>
     <p>하지만 물을 머금은 흙은 생각보다 훨씬 무겁기 때문에, 건물이 그 무게를 견딜 수 있는지 먼저 살펴야 합니다. 물이 아래층으로 새지 않도록 하는 공사가 필요하고, 식물에 물을 주고 가꾸는 일도 꾸준히 해야 합니다.</p>
   </article>
@@ -134,7 +134,7 @@ nav.pn span{visibility:hidden}
   <ul class="src"><li>출처는 사진을 넣을 때 기관·언론 자료로 함께 정리합니다.</li></ul>
 
   <nav class="pn">
-    <a class="prev" href="energy-08.html"><small>이전 카드</small>← 바깥 차양</a>
+    <a class="prev" href="energy-08.html"><small>이전 카드</small>← 창문 바깥에 차양 달기</a>
     <span></span>
   </nav>
 </div>
@@ -202,7 +202,7 @@ document.querySelectorAll(".ph[data-photo]").forEach(box=>{
   const base=box.dataset.photo, exts=["jpg","jpeg","png","webp","JPG"]; let i=0;
   const img=new Image(); img.alt=box.textContent.replace("사진 자리","").trim();
   img.onload=()=>{ box.classList.add("has"); box.replaceChildren(img); };
-  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; else if(i===exts.length&&box.dataset.remote) img.src=box.dataset.remote; };
+  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
   img.src=base+"."+exts[0];
 });
 </script>

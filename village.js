@@ -498,13 +498,13 @@ function MapAnim(cSky,cAnim){
 /* ---------------- our house (cutaway) ---------------- */
 const HOUSE={W:400,H:330};
 const HOUSE_ITEMS=[
-  {id:"faucet", name:"절수 수도꼭지", at:[0.45,1.5,26], href:"water-01.html"},
-  {id:"toilet", name:"절수형 변기", at:[0.7,3.5,19], href:"water-02.html"},
+  {id:"faucet", name:"절수 수도꼭지 설치하기", at:[0.45,1.5,26], href:"water-01.html"},
+  {id:"toilet", name:"절수형 변기 사용하기", at:[0.7,3.5,19], href:"water-02.html"},
   {id:"fridge", name:"냉장고 똑똑하게 쓰기", at:[0.75,7,45], href:"energy-12.html"},
-  {id:"aircon", name:"인버터 에어컨", at:[5.8,0.35,61], href:"energy-13.html"},
-  {id:"plug",   name:"스마트 플러그", at:[5.3,0,14], href:"energy-05.html"},
-  {id:"window", name:"단열 에어캡", at:[8.75,0,49], href:"energy-06.html"},
-  {id:"door",   name:"문풍지", at:[11.2,0,44], href:"energy-07.html"}
+  {id:"aircon", name:"인버터 에어컨 고르기", at:[5.8,0.35,61], href:"energy-13.html"},
+  {id:"plug",   name:"스마트 플러그로 대기 전력 줄이기", at:[5.3,0,14], href:"energy-05.html"},
+  {id:"window", name:"창문에 단열 에어캡 붙이기", at:[8.75,0,49], href:"energy-06.html"},
+  {id:"door",   name:"문틈에 문풍지 붙이기", at:[11.2,0,44], href:"energy-07.html"}
 ];
 const ROOMS=[];
 function drawHouse(canvas,sky){
@@ -616,9 +616,9 @@ function drawHouse(canvas,sky){
 }
 /* ---------------- apartment unit (cutaway): entrance hall, living room, balcony ---------------- */
 const APT_ITEMS=[
-  {id:"erv",     name:"전열 교환기", at:[5.6,0,40], href:"energy-02.html"},
-  {id:"sensor",  name:"센서등", at:[1.6,1.6,56], href:"energy-04.html"},
-  {id:"balcony", name:"베란다 태양광", at:[12.7,4.8,22], href:"energy-10.html"}
+  {id:"erv",     name:"전열 교환기 사용하기", at:[5.6,0,40], href:"energy-02.html"},
+  {id:"sensor",  name:"센서등 설치하기", at:[1.6,1.6,56], href:"energy-04.html"},
+  {id:"balcony", name:"베란다에 태양광 패널 달기", at:[12.7,4.8,22], href:"energy-10.html"}
 ];
 function drawApt(canvas,sky){
   const g=setup(canvas,HOUSE.W,HOUSE.H,sky), D=Painter(g,180,112,16,1.34);
@@ -697,7 +697,7 @@ function drawApt(canvas,sky){
 }
 /* ---------------- school: classroom cutaway + garden with rain barrel ---------------- */
 const SCHOOL_ITEMS=[
-  {id:"rain",  name:"빗물 저금통", at:[10.4,.9,22], href:"water-03.html"},
+  {id:"rain",  name:"빗물 저금통으로 빗물 모으기", at:[10.4,.9,22], href:"water-03.html"},
   {id:"paper", name:"재생 종이 쓰기", at:[7,1.2,20], href:"forest-02.html"}
 ];
 function drawSchool(canvas,sky){
@@ -767,9 +767,9 @@ function drawSchool(canvas,sky){
 /* ---------------- big building: tower with blinds + green roof, basement water-reuse room cut open in front ---------------- */
 const TOWER={W:400,H:360};
 const TOWER_ITEMS=[
-  {id:"grey",      name:"중수도", at:[4.4,6.4,-6], href:"water-04.html"},
-  {id:"awning",    name:"바깥 차양", at:[7.6,4.2,48], href:"energy-08.html"},
-  {id:"greenroof", name:"옥상 녹화", at:[5.2,1.8,66], href:"energy-09.html"}
+  {id:"grey",      name:"중수도로 물 다시 쓰기", at:[4.4,6.4,-6], href:"water-04.html"},
+  {id:"awning",    name:"창문 바깥에 차양 달기", at:[7.6,4.2,48], href:"energy-08.html"},
+  {id:"greenroof", name:"옥상에 식물 심기(옥상 녹화)", at:[5.2,1.8,66], href:"energy-09.html"}
 ];
 function drawTower(canvas,sky){
   const g=setup(canvas,TOWER.W,TOWER.H,sky), D=Painter(g,186,118,16,1.34);
@@ -830,8 +830,8 @@ function drawTower(canvas,sky){
 }
 /* ---------------- residential rooftops: flat roof being painted white (cool roof) + gable roof with solar water heater ---------------- */
 const ROOFS_ITEMS=[
-  {id:"coolroof",   name:"쿨 루프", at:[2.6,5.2,32], href:"energy-03.html"},
-  {id:"solarwater", name:"태양열 온수기", at:[9.9,7.3,33], href:"energy-11.html"}
+  {id:"coolroof",   name:"옥상을 하얗게 칠하기(쿨 루프)", at:[2.6,5.2,32], href:"energy-03.html"},
+  {id:"solarwater", name:"태양열 온수기로 물 데우기", at:[9.9,7.3,33], href:"energy-11.html"}
 ];
 function drawRoofs(canvas,sky){
   const g=setup(canvas,HOUSE.W,HOUSE.H,sky), D=Painter(g,180,128,16,1.34);
@@ -900,9 +900,9 @@ function drawRoofs(canvas,sky){
 }
 /* ---------------- appliance store interior + repair corner ---------------- */
 const SHOP_ITEMS=[
-  {id:"grade",   name:"에너지 소비 효율 등급", at:[1.3,3.3,33], href:"energy-01.html"},
-  {id:"battery", name:"충전식 건전지", at:[6.4,8.2,17], href:"mineral-02.html"},
-  {id:"repair",  name:"고쳐 쓰기 쉬운 제품", at:[10.6,1.6,22], href:"mineral-03.html"}
+  {id:"grade",   name:"에너지 소비 효율 등급 제품 고르기", at:[1.3,3.3,33], href:"energy-01.html"},
+  {id:"battery", name:"충전식 건전지 사용하기", at:[6.4,8.2,17], href:"mineral-02.html"},
+  {id:"repair",  name:"고쳐 쓰기 쉬운 제품 고르기", at:[10.6,1.6,22], href:"mineral-03.html"}
 ];
 function drawShop(canvas,sky){
   const g=setup(canvas,HOUSE.W,HOUSE.H,sky), D=Painter(g,180,112,16,1.34);
@@ -972,8 +972,8 @@ function bigPerson(g,P,x,y,z,shirt,hair="#3a2a20",hat){
 }
 /* ---------------- recycling center: sorting line + e-waste (urban mine) corner ---------------- */
 const RECYCLE_ITEMS=[
-  {id:"urbanmine", name:"도시 광산", at:[3.6,7.6,16], href:"mineral-01.html"},
-  {id:"can",       name:"알루미늄 캔을 다시 캔으로", at:[10.6,4.8,18], href:"mineral-04.html"}
+  {id:"urbanmine", name:"안 쓰는 휴대폰 수거함에 넣기", at:[3.6,7.6,16], href:"mineral-01.html"},
+  {id:"can",       name:"알루미늄 캔 분리배출하기", at:[10.6,4.8,18], href:"mineral-04.html"}
 ];
 function drawRecycle(canvas,sky){
   const g=setup(canvas,HOUSE.W,HOUSE.H,sky), D=Painter(g,180,112,16,1.34);
@@ -1023,7 +1023,7 @@ function drawRecycle(canvas,sky){
 /* ---------------- forest + woodshop: FSC-certified wood/paper storeroom, sawdust -> pellet mill -> pellet boiler ---------------- */
 const FOREST_ITEMS=[
   {id:"fsc",    name:"FSC 인증 종이 고르기", at:[.8,3.2,34], href:"forest-01.html"},
-  {id:"pellet", name:"목재 펠릿", at:[4.9,1.2,24], href:"forest-03.html"}
+  {id:"pellet", name:"목재 펠릿으로 난방하기", at:[4.9,1.2,24], href:"forest-03.html"}
 ];
 function drawForest(canvas,sky){
   const g=setup(canvas,HOUSE.W,HOUSE.H,sky), D=Painter(g,180,112,16,1.34);

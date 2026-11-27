@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>태양열 온수기</title>
+<title>태양열 온수기로 물 데우기</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -107,12 +107,12 @@ nav.pn span{visibility:hidden}
 
   <header class="h">
     <div class="icon" id="icon"></div>
-    <div><p class="no">에너지 11</p><h1>태양열 온수기</h1></div>
+    <div><p class="no">에너지 11</p><h1>태양열 온수기로 물 데우기</h1></div>
   </header>
 
   <article>
     <p>태양열 온수기는 햇볕의 열로 물을 데우는 장치입니다. 이름이 비슷한 &#x27;태양광&#x27;은 햇빛을 전기로 바꾸지만, &#x27;태양열&#x27;은 햇볕의 따뜻한 열을 그대로 모아서 씁니다. 지붕 위의 &#x27;집열판&#x27;에는 검은색 관이 들어 있는데, 검은색은 햇볕의 열을 잘 흡수하기 때문에 관 속의 물이 따뜻하게 데워집니다. 데워진 물은 물탱크에 모아 두었다가 씻거나 난방할 때 씁니다.</p>
-    <figure><div class="ph" data-photo="images/energy-11" data-remote="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Solar_water_heater_installed_on_rooftop.jpg/960px-Solar_water_heater_installed_on_rooftop.jpg"><span>사진 자리<br>지붕 위 집열판과 물탱크</span></div><figcaption>지붕 위 집열판과 물탱크<br><small>사진: రవిచంద్ర · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:Solar_water_heater_installed_on_rooftop.jpg" target="_blank" rel="noopener">위키미디어 공용</a></small></figcaption></figure>
+    <figure><div class="ph" data-photo="images/energy-11"><span>사진 자리<br>지붕 위 집열판과 물탱크</span></div><figcaption>지붕 위 집열판과 물탱크</figcaption></figure>
     <p>여름에 검은 호스에 담겨 있던 물이 뜨거워져 있던 경험이 있나요? 태양열 온수기는 바로 그 원리를 이용합니다. 물을 데우는 데 드는 가스나 기름을 줄일 수 있고, 구조가 단순해 햇볕이 잘 드는 곳에서는 오랫동안 쓸 수 있습니다.</p>
     <p>태양열 온수기에는 재미있는 엇갈림이 있습니다. 햇볕이 강한 여름에는 물이 가장 잘 데워지지만, 정작 따뜻한 물이 가장 많이 필요한 때는 춥고 해가 짧은 겨울입니다. 그래서 대부분 보일러와 함께 쓰면서 보일러가 할 일을 덜어 주는 역할을 합니다. 또 물이 가득 찬 물탱크와 집열판은 무거워서 지붕이 튼튼해야 하고, 겨울에 관 속의 물이 얼지 않도록 관리해야 합니다.</p>
   </article>
@@ -134,7 +134,7 @@ nav.pn span{visibility:hidden}
   <ul class="src"><li>출처는 사진을 넣을 때 기관·언론 자료로 함께 정리합니다.</li></ul>
 
   <nav class="pn">
-    <a class="prev" href="energy-03.html"><small>이전 카드</small>← 쿨 루프</a>
+    <a class="prev" href="energy-03.html"><small>이전 카드</small>← 옥상을 하얗게 칠하기(쿨 루프)</a>
     <span></span>
   </nav>
 </div>
@@ -202,7 +202,7 @@ document.querySelectorAll(".ph[data-photo]").forEach(box=>{
   const base=box.dataset.photo, exts=["jpg","jpeg","png","webp","JPG"]; let i=0;
   const img=new Image(); img.alt=box.textContent.replace("사진 자리","").trim();
   img.onload=()=>{ box.classList.add("has"); box.replaceChildren(img); };
-  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; else if(i===exts.length&&box.dataset.remote) img.src=box.dataset.remote; };
+  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
   img.src=base+"."+exts[0];
 });
 </script>
