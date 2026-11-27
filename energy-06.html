@@ -71,6 +71,10 @@ h2.sec::before{content:""; width:12px; height:12px; background:var(--acc)}
 .vids figure{margin:0 0 22px}
 .video{position:relative; aspect-ratio:16/9; border:2px solid var(--line); background:var(--tile)}
 .video iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.ph.has{border:2px solid var(--line); padding:0; aspect-ratio:auto; display:block}
+.ph img{display:block; width:100%; height:auto}
+figcaption small{color:var(--sub); font-size:12px}
+figcaption small a{color:inherit}
 .video .ph{position:absolute; inset:0; aspect-ratio:auto; border:0}
 .gloss{border:2px solid var(--line); background:var(--paper); padding:6px 18px}
 .gloss dl{margin:0}
@@ -108,7 +112,7 @@ nav.pn span{visibility:hidden}
 
   <article>
     <p>단열 에어캡은 작은 공기 방울이 촘촘히 들어 있는 비닐로, 흔히 &#x27;뽁뽁이&#x27;라고 부릅니다. 공기는 열을 잘 전달하지 않는 성질이 있어서, 유리창에 붙이면 방 안의 따뜻한 열이 차가운 유리를 통해 빠져나가는 것을 막아 줍니다. 유리를 두 겹으로 만든 이중창, 공기층이 있는 보온병, 솜털이 들어 따뜻한 패딩도 모두 같은 원리를 이용합니다.</p>
-    <figure><div class="ph">사진 자리<br>유리창에 붙인 단열 에어캡</div><figcaption>사진과 출처는 다음 단계에서 넣습니다.</figcaption></figure>
+    <figure><div class="ph" data-photo="images/energy-06"><span>사진 자리<br>유리창에 붙인 단열 에어캡</span></div><figcaption>유리창에 붙인 단열 에어캡<br><small>사진: User Consequencefree on en.wikipedia · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Bubble_Wrap.jpg" target="_blank" rel="noopener">위키미디어 공용</a></small></figcaption></figure>
     <p>집에서 열이 가장 많이 빠져나가는 곳 가운데 하나가 바로 창문입니다. 분무기로 유리에 물을 뿌리고 에어캡을 붙이기만 하면 되니, 누구나 적은 돈으로 쉽게 난방 에너지를 아낄 수 있습니다. 창문에 물방울이 맺히는 결로 현상을 줄여 주기도 합니다.</p>
     <p>에어캡은 공기 방울이 크고 여러 겹일수록 열을 더 잘 막지만, 그만큼 빛도 덜 들어옵니다. 햇볕이 드는 낮에는 유리를 지나 들어온 햇빛이 방을 데워 주기 때문에, 햇빛이 잘 드는 남쪽 창까지 모두 덮는 것이 좋은지 고민해 볼 만합니다. 또 겨울 한 철 쓰고 나면 누렇게 변하거나 찢어져 비닐 쓰레기가 나오므로, 떼어 낼 때 잘 말아 두었다가 다음 겨울에 다시 쓰는 방법도 있습니다.</p>
   </article>
@@ -194,6 +198,13 @@ document.getElementById("icon").innerHTML=pix(ICON.bubble);
     cv.style.left=Math.min(0,Math.max(bw-w, bw/2-p[0]*sc))+"px"; cv.style.top=Math.min(0,Math.max(bh-info.H*sc, bh*.62-p[1]*sc))+"px"; };
   place(); addEventListener("resize",place);
 })();
+document.querySelectorAll(".ph[data-photo]").forEach(box=>{
+  const base=box.dataset.photo, exts=["jpg","jpeg","png","webp","JPG"]; let i=0;
+  const img=new Image(); img.alt=box.textContent.replace("사진 자리","").trim();
+  img.onload=()=>{ box.classList.add("has"); box.replaceChildren(img); };
+  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
+  img.src=base+"."+exts[0];
+});
 </script>
 </body>
 </html>

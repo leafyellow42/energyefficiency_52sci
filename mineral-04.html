@@ -71,6 +71,10 @@ h2.sec::before{content:""; width:12px; height:12px; background:var(--acc)}
 .vids figure{margin:0 0 22px}
 .video{position:relative; aspect-ratio:16/9; border:2px solid var(--line); background:var(--tile)}
 .video iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.ph.has{border:2px solid var(--line); padding:0; aspect-ratio:auto; display:block}
+.ph img{display:block; width:100%; height:auto}
+figcaption small{color:var(--sub); font-size:12px}
+figcaption small a{color:inherit}
 .video .ph{position:absolute; inset:0; aspect-ratio:auto; border:0}
 .gloss{border:2px solid var(--line); background:var(--paper); padding:6px 18px}
 .gloss dl{margin:0}
@@ -108,7 +112,7 @@ nav.pn span{visibility:hidden}
 
   <article>
     <p>음료수 캔은 대부분 알루미늄으로 만듭니다. 알루미늄은 여러 번 녹여도 성질이 거의 변하지 않아서, 다 마신 캔을 모아 녹이면 다시 새 캔으로 만들 수 있습니다. 이렇게 같은 제품으로 몇 번이고 다시 태어날 수 있다는 점이 알루미늄의 특별한 점입니다.</p>
-    <figure><div class="ph">사진 자리<br>압착해 묶은 알루미늄 캔 더미</div><figcaption>사진과 출처는 다음 단계에서 넣습니다.</figcaption></figure>
+    <figure><div class="ph" data-photo="images/mineral-04"><span>사진 자리<br>압착해 묶은 알루미늄 캔 더미</span></div><figcaption>압착해 묶은 알루미늄 캔 더미<br><small>사진: 작성자 표기 없음 · Public domain · <a href="https://commons.wikimedia.org/wiki/File:Camp_Pendleton%27s_occupants_recycle_more_than_22,000_aluminum_cans_every_three_weeks.jpg" target="_blank" rel="noopener">위키미디어 공용</a></small></figcaption></figure>
     <p>알루미늄을 처음 만들 때는 &#x27;보크사이트&#x27;라는 붉은 갈색 광석을 캐서, 아주 많은 전기를 써서 알루미늄만 뽑아내야 합니다. 그런데 헌 캔을 녹여 다시 만들면 처음 만들 때 드는 에너지의 약 5%만 있으면 된다고 알려져 있습니다. 광물 자원과 에너지를 한꺼번에 아낄 수 있는 셈입니다.</p>
     <p>알루미늄 캔과 철 캔은 자석으로 구별할 수 있습니다. 자석에 붙지 않으면 알루미늄 캔, 붙으면 철 캔입니다. 재활용 선별장에서도 이 성질을 이용해 커다란 자석으로 철 캔을 먼저 골라내고, 알루미늄 캔은 &#x27;맴돌이 전류&#x27;라는 전기의 힘으로 튕겨 내어 따로 모읍니다. 이렇게 골라내도 캔 안에 음료나 담배꽁초 같은 이물질이 남아 있으면 다시 녹여 쓰기 어렵습니다.</p>
   </article>
@@ -194,6 +198,13 @@ document.getElementById("icon").innerHTML=pix(ICON.can);
     cv.style.left=Math.min(0,Math.max(bw-w, bw/2-p[0]*sc))+"px"; cv.style.top=Math.min(0,Math.max(bh-info.H*sc, bh*.62-p[1]*sc))+"px"; };
   place(); addEventListener("resize",place);
 })();
+document.querySelectorAll(".ph[data-photo]").forEach(box=>{
+  const base=box.dataset.photo, exts=["jpg","jpeg","png","webp","JPG"]; let i=0;
+  const img=new Image(); img.alt=box.textContent.replace("사진 자리","").trim();
+  img.onload=()=>{ box.classList.add("has"); box.replaceChildren(img); };
+  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
+  img.src=base+"."+exts[0];
+});
 </script>
 </body>
 </html>

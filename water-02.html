@@ -71,6 +71,10 @@ h2.sec::before{content:""; width:12px; height:12px; background:var(--acc)}
 .vids figure{margin:0 0 22px}
 .video{position:relative; aspect-ratio:16/9; border:2px solid var(--line); background:var(--tile)}
 .video iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.ph.has{border:2px solid var(--line); padding:0; aspect-ratio:auto; display:block}
+.ph img{display:block; width:100%; height:auto}
+figcaption small{color:var(--sub); font-size:12px}
+figcaption small a{color:inherit}
 .video .ph{position:absolute; inset:0; aspect-ratio:auto; border:0}
 .gloss{border:2px solid var(--line); background:var(--paper); padding:6px 18px}
 .gloss dl{margin:0}
@@ -108,7 +112,7 @@ nav.pn span{visibility:hidden}
 
   <article>
     <p>절수형 변기는 물을 한 번 내릴 때 적은 양의 물만 쓰도록 만든 변기입니다. 오래된 변기는 한 번 내릴 때 13L가 넘는 물을 쓰기도 했지만, 요즘 새로 짓는 건물에는 한 번에 6L 이하를 쓰는 변기를 달아야 합니다. 변기 안쪽의 모양과 물이 흘러가는 길을 바꾸어 적은 물로도 힘차게 씻어 내려가게 만든 것입니다.</p>
-    <figure><div class="ph">사진 자리<br>버튼이 두 개인 절수형 변기</div><figcaption>사진과 출처는 다음 단계에서 넣습니다.</figcaption></figure>
+    <figure><div class="ph" data-photo="images/water-02"><span>사진 자리<br>버튼이 두 개인 절수형 변기</span></div><figcaption>버튼이 두 개인 절수형 변기<br><small>사진 준비 중</small></figcaption></figure>
     <p>집에서 쓰는 물 가운데 변기에서 쓰는 물은 4분의 1 정도로 큰 비중을 차지한다고 알려져 있습니다. 하루에도 여러 번 물을 내리기 때문에, 한 번에 조금만 아껴도 1년이면 아주 많은 물을 아낄 수 있습니다. 버튼이 두 개인 변기는 소변을 볼 때는 적은 물, 대변을 볼 때는 많은 물을 골라 쓸 수 있어 더 효율적입니다.</p>
     <p>오래된 변기를 새것으로 바꾸려면 돈이 듭니다. 그래서 변기 물통에 물을 채운 페트병을 넣어 물통에 담기는 물의 양을 줄이는 방법을 쓰기도 합니다. 다만 물이 너무 적으면 한 번에 내려가지 않아 두세 번 내리게 되므로, 오히려 물이 더 들 수도 있다는 점을 생각해야 합니다.</p>
   </article>
@@ -193,6 +197,13 @@ document.getElementById("icon").innerHTML=pix(ICON.toilet);
     cv.style.left=Math.min(0,Math.max(bw-w, bw/2-p[0]*sc))+"px"; cv.style.top=Math.min(0,Math.max(bh-info.H*sc, bh*.62-p[1]*sc))+"px"; };
   place(); addEventListener("resize",place);
 })();
+document.querySelectorAll(".ph[data-photo]").forEach(box=>{
+  const base=box.dataset.photo, exts=["jpg","jpeg","png","webp","JPG"]; let i=0;
+  const img=new Image(); img.alt=box.textContent.replace("사진 자리","").trim();
+  img.onload=()=>{ box.classList.add("has"); box.replaceChildren(img); };
+  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
+  img.src=base+"."+exts[0];
+});
 </script>
 </body>
 </html>

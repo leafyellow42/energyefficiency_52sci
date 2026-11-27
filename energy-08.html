@@ -71,6 +71,10 @@ h2.sec::before{content:""; width:12px; height:12px; background:var(--acc)}
 .vids figure{margin:0 0 22px}
 .video{position:relative; aspect-ratio:16/9; border:2px solid var(--line); background:var(--tile)}
 .video iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.ph.has{border:2px solid var(--line); padding:0; aspect-ratio:auto; display:block}
+.ph img{display:block; width:100%; height:auto}
+figcaption small{color:var(--sub); font-size:12px}
+figcaption small a{color:inherit}
 .video .ph{position:absolute; inset:0; aspect-ratio:auto; border:0}
 .gloss{border:2px solid var(--line); background:var(--paper); padding:6px 18px}
 .gloss dl{margin:0}
@@ -108,7 +112,7 @@ nav.pn span{visibility:hidden}
 
   <article>
     <p>바깥 차양은 창문 바깥에서 햇빛을 가리는 장치입니다. 창문 위로 펼치는 천 지붕, 창문 바깥에 단 블라인드, 창가에 키우는 덩굴 식물의 &#x27;초록 커튼&#x27; 등이 있습니다. 커튼을 창 안쪽에 치면 햇빛의 열은 이미 유리를 지나 집 안에 들어온 뒤지만, 바깥 차양은 햇빛이 유리에 닿기 전에 막아 줍니다.</p>
-    <figure><div class="ph">사진 자리<br>창문 바깥에 단 외부 블라인드</div><figcaption>사진과 출처는 다음 단계에서 넣습니다.</figcaption></figure>
+    <figure><div class="ph" data-photo="images/energy-08"><span>사진 자리<br>창문 바깥에 단 외부 블라인드</span></div><figcaption>창문 바깥에 단 외부 블라인드<br><small>사진 준비 중</small></figcaption></figure>
     <p>그래서 같은 햇빛을 가려도 안쪽 커튼보다 방이 훨씬 덜 더워지고, 여름철 에어컨 전기를 아낄 수 있습니다. 우리 조상들도 이 원리를 알고 있었습니다. 한옥의 길게 나온 처마는 태양이 높이 뜨는 여름에는 햇빛을 가리고, 태양이 낮게 뜨는 겨울에는 햇빛이 방 안 깊숙이 들어오게 해 줍니다.</p>
     <p>덩굴 식물로 만든 초록 커튼은 여름에는 잎이 무성해 햇빛을 가리고, 겨울에는 잎이 져서 햇빛을 들여보내므로 계절에 맞게 저절로 역할을 바꿔 줍니다. 수세미, 나팔꽃, 여주처럼 빨리 자라는 한해살이 덩굴이 많이 쓰입니다. 천이나 블라인드로 된 바깥 차양은 겨울에 걷어 햇빛을 들이고, 바람이 센 날에는 접어 두어야 해서 계절과 날씨에 따라 관리하는 손길이 필요합니다.</p>
   </article>
@@ -194,6 +198,13 @@ document.getElementById("icon").innerHTML=pix(ICON.awning);
     cv.style.left=Math.min(0,Math.max(bw-w, bw/2-p[0]*sc))+"px"; cv.style.top=Math.min(0,Math.max(bh-info.H*sc, bh*.62-p[1]*sc))+"px"; };
   place(); addEventListener("resize",place);
 })();
+document.querySelectorAll(".ph[data-photo]").forEach(box=>{
+  const base=box.dataset.photo, exts=["jpg","jpeg","png","webp","JPG"]; let i=0;
+  const img=new Image(); img.alt=box.textContent.replace("사진 자리","").trim();
+  img.onload=()=>{ box.classList.add("has"); box.replaceChildren(img); };
+  img.onerror=()=>{ if(++i<exts.length) img.src=base+"."+exts[i]; };
+  img.src=base+"."+exts[0];
+});
 </script>
 </body>
 </html>
