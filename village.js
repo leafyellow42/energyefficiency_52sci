@@ -617,7 +617,7 @@ function drawHouse(canvas,sky){
 /* ---------------- apartment unit (cutaway): entrance hall, living room, balcony ---------------- */
 const APT_ITEMS=[
   {id:"erv",     name:"전열 교환기 사용하기", at:[5.6,0,40], href:"energy-02.html"},
-  {id:"sensor",  name:"센서등 설치하기", at:[1.6,1.6,56], href:"energy-04.html"},
+  {id:"sensor",  name:"센서등 설치하기", at:[.2,2.3,52], href:"energy-04.html"},
   {id:"balcony", name:"베란다에 태양광 패널 달기", at:[12.7,4.8,22], href:"energy-10.html"}
 ];
 function drawApt(canvas,sky){
@@ -649,17 +649,17 @@ function drawApt(canvas,sky){
   L([12.6,0,0],[12.6,0,64]); L([0,10,0],[0,10,64]); L([0,10,0],[12,10,0],"#8f887c"); L([12,10,0],[12,0,0],"#8f887c");
   // ceiling bulkhead along the back wall with ERV duct and diffusers
   box(0,0,12.6,1.3,58,6,"#f7f5f0","#ffffff","#e6e2da");
-  box(0,0,3,4.2,58,6,"#f7f5f0","#ffffff","#e6e2da");
   [[4.6],[7.6]].forEach(([x])=>{ Q([[x,.25,58],[x+1.1,.25,58],[x+1.1,1.05,58],[x,1.05,58]],"#d9dde1"); for(let k=1;k<4;k++){ const xx=x+k*.27; L([xx,.3,58],[xx,1,58],"#aeb4ba"); } });
   // ERV wall controller
   Q([[5.1,0,34],[6.2,0,34],[6.2,0,42],[5.1,0,42]],"#ffffff"); L([5.1,0,34],[6.2,0,34],"#b9b3a6"); Q([[5.25,0,37],[6.05,0,37],[6.05,0,41],[5.25,0,41]],"#2f6b8a"); dot(5.4,0,40,"#9be0ff",3,1); dot(5.4,0,38.6,"#9be0ff",2,1); dot(5.3,0,35.6,"#3cc45a"); dot(5.6,0,35.6,"#d9dde1"); dot(5.9,0,35.6,"#d9dde1");
-  // entrance: front door on x=0 wall, shoe cabinet on y=0 wall, mirror, sensor light under the bulkhead
+  // entrance: front door on x=0 wall, shoe cabinet on y=0 wall, mirror, sensor light above the door
   Q([[0,1.2,0],[0,3.4,0],[0,3.4,42],[0,1.2,42]],C.ol); Q([[0,1.3,0],[0,3.3,0],[0,3.3,41],[0,1.3,41]],"#6f7f8c"); Q([[0,1.5,3],[0,3.1,3],[0,3.1,38],[0,1.5,38]],"#7f909d"); dot(0,3,22,"#d6dade",1,3); dot(0,2.2,32,"#2b2c2f",2,2);
   box(.4,0,2.8,.9,0,30,"#e8e2d6","#f6f2ea","#d9d2c4"); L([1.6,.9,2],[1.6,.9,28],"#c9c0ae"); L([.4,.9,15],[2.8,.9,15],"#c9c0ae"); dot(1.45,.9,20,"#9aa0a6",1,2); dot(1.75,.9,20,"#9aa0a6",1,2);
   box(.8,.1,1.3,.6,30,4,"#f0a3b5","#e48aa0","#c9748a",{hl:false}); tree(1.05,.35,34,2.2,0);
   dot(.6,1.8,0,"#3b82c4",3,1); dot(.9,2.4,0,"#d9534f",3,1); dot(1.8,1.6,0,"#2b2c2f",3,1);
-  { const p=P(1.6,1.6,58); g.fillStyle="rgba(255,236,150,.28)"; g.beginPath(); g.moveTo(p[0]-3,p[1]+2); g.lineTo(p[0]+3,p[1]+2); g.lineTo(p[0]+22,p[1]+70); g.lineTo(p[0]-22,p[1]+70); g.closePath(); g.fill();
-    g.fillStyle="#d6dade"; g.fillRect(p[0]-5,p[1],10,2); g.fillStyle="#fff6c8"; g.fillRect(p[0]-4,p[1]+2,8,2); g.fillStyle="#9aa0a6"; g.fillRect(p[0]-1,p[1]+1,2,1); }
+  // motion-sensor light on the wall above the front door
+  box(0,1.95,.35,2.65,47,3,"#e9ecef","#ffffff","#d6dade",{hl:false});
+  { const p=P(.35,2.3,47); g.fillStyle="#fff6c8"; g.fillRect(p[0]-3,p[1],6,2); g.fillStyle="#9aa0a6"; g.fillRect(p[0]-1,p[1]-2,2,1); }
   // living: wall TV + console, sofa, side table, lamp, plants, family photos
   box(3.5,.1,7.6,1.1,0,5,"#e8e2d6","#f6f2ea","#d9d2c4"); for(let x=4.5;x<7.6;x+=1) L([x,1.1,1],[x,1.1,4.6],"#c9c0ae");
   Q([[4,0,14],[7.1,0,14],[7.1,0,30],[4,0,30]],"#24262b"); Q([[4.15,0,15],[6.95,0,15],[6.95,0,29],[4.15,0,29]],"#3f6c8f"); Q([[4.15,0,15],[6.95,0,15],[6.95,0,20],[4.15,0,20]],"#5d9a62"); dot(6.4,0,27,C.yellow,2,2);

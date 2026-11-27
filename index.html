@@ -97,7 +97,7 @@ canvas{position:absolute; image-rendering:pixelated; image-rendering:crisp-edges
 <div class="stage" id="stage">
   <div class="title" id="title"></div>
   <div class="view" id="v-map" style="--ar:680/470"><canvas id="c-sky"></canvas><canvas id="c-map"></canvas><canvas id="c-anim"></canvas><canvas id="c-obj"></canvas><div class="layer" id="l-map"></div></div>
-  <div class="view" id="v-home" style="--ar:400/330" hidden><canvas id="c-home"></canvas><div class="layer" id="l-home"></div></div>
+  <div class="view" id="v-home" style="--ar:400/330" hidden><canvas id="c-home"></canvas><canvas id="c-hanim"></canvas><div class="layer" id="l-home"></div></div>
   <div class="toast" id="toast" role="status"></div>
   <a class="hits" href="https://hits.sh/leafyellow42.github.io/energyefficiency_52sci/" target="_blank" rel="noopener" aria-label="방문자 수"><img alt="방문자 수" src="https://hits.sh/leafyellow42.github.io/energyefficiency_52sci.svg?style=flat-square&amp;label=%EB%B0%A9%EB%AC%B8%EC%9E%90&amp;color=ffffff&amp;labelColor=ffffff"></a>
 </div>
@@ -130,6 +130,51 @@ const V=window.Village;
 const sky=()=>getComputedStyle(document.documentElement).getPropertyValue("--sky").trim();
 const pct=(p,W,H)=>`left:${p[0]/W*100}%;top:${p[1]/H*100}%`;
 const TRI='<svg viewBox="0 0 22 22" aria-hidden="true"><polygon points="2,3 20,3 11,19"/></svg>';
+/* small ambient animations inside each place view (scene pixel coords via P) */
+const FX={
+  drip(x,y,z,len){ len=len||7; return (g,t,P)=>{ const [px,py]=P(x,y,z), ph=t%16;
+    if(ph<len){ g.fillStyle="#4a90c8"; g.fillRect(px,py+ph,1,2); }
+    else if(ph<len+2){ g.fillStyle="#a9d3f0"; g.fillRect(px-2,py+len+1,1,1); g.fillRect(px+2,py+len+1,1,1); g.fillRect(px,py+len,1,1); } }; },
+  glint(pts,period){ period=period||26; return (g,t,P)=>pts.forEach((p,i)=>{ const ph=(t+i*9)%period; if(ph>2) return;
+    const [px,py]=P(...p); g.fillStyle="#ffffff"; g.fillRect(px,py,1,1);
+    if(ph===1){ g.fillStyle="rgba(255,251,224,.95)"; g.fillRect(px-2,py,5,1); g.fillRect(px,py-2,1,5); } }); },
+  smoke(x,y,z,col){ col=col||"200,200,200"; return (g,t,P)=>{ const [px,py]=P(x,y,z);
+    for(let k=0;k<3;k++){ const a=(t+k*9)%27, s=a<9?2:3; g.fillStyle=`rgba(${col},${(1-a/27)*.85})`;
+      g.fillRect(px+Math.round(Math.sin((t+k*9)*.35)*1.5)+(a>>3), py-a, s, s); } }; },
+  leaves(x0,x1,y0,fall,n){ const L=[...Array(n)].map((_,i)=>({x:x0+((i*37)%(x1-x0)),o:i*11,c:["#e8893a","#f2c230","#9ccf6b"][i%3]}));
+    return (g,t)=>L.forEach(l=>{ const a=(t+l.o)%(fall+20); if(a>=fall) return; g.fillStyle=l.c;
+      g.fillRect(l.x+Math.round(Math.sin(a*.3)*3), y0+a, 2, 1); }); },
+  butterfly(x,y,z,r,col){ col=col||"#ffffff"; return (g,t,P)=>{ const [cx,cy]=P(x,y,z), px=Math.round(cx+Math.cos(t*.18)*r), py=Math.round(cy+Math.sin(t*.36)*r*.45);
+    g.fillStyle=col; if(t%2){ g.fillRect(px-2,py,2,2); g.fillRect(px+1,py,2,2);} else { g.fillRect(px-1,py-1,1,2); g.fillRect(px+1,py-1,1,2);} g.fillStyle="#2b2c2f"; g.fillRect(px,py,1,2); }; },
+  birds(y,n,W){ return (g,t)=>{ for(let k=0;k<n;k++){ const px=Math.round((t*1.2+k*23+k*k*31)%(W+60))-30, py=y+k*5+(k%2)*3, up=(t+k)%4<2;
+      g.fillStyle="#5c6470"; g.fillRect(px-2,py+(up?0:1),2,1); g.fillRect(px+1,py+(up?0:1),2,1); g.fillRect(px,py+1,1,1); } }; },
+  led(x,y,z,col){ return (g,t,P)=>{ if(t%12<6){ const [px,py]=P(x,y,z); g.fillStyle=col||"#ff4a3d"; g.fillRect(px,py,1,1); } }; },
+  air(x,y,z){ return (g,t,P)=>{ const [px,py]=P(x,y,z); for(let k=0;k<3;k++){ const a=(t+k*5)%15;
+      g.fillStyle=`rgba(169,211,240,${1-a/15})`; g.fillRect(px-8+k*7+(a>>2), py+a, 4, 1); } }; },
+  lamp(x,y,z,h){ return (g,t,P)=>{ const ph=t%44; if(ph>18) return; const [px,py]=P(x,y,z); h=h||22;
+      g.fillStyle=`rgba(255,226,120,${ph<2||ph>16?.18:.32})`;
+      for(let i=0;i<h;i++){ const w=2+Math.round(i*.7); g.fillRect(px-w,py+i,w*2+1,1); } }; },
+  sparks(x,y,z){ return (g,t,P)=>{ if(t%6>2) return; const [px,py]=P(x,y,z);
+      for(let k=0;k<4;k++){ const s=(t*7+k*13)%9; g.fillStyle=k%2?"#f2c230":"#fff6c0"; g.fillRect(px+((s%5)-2)*1,py-(s>>1),1,1); } }; },
+  belt(x0,y0,x1,y1,n){ const C=["#d9534f","#4a90c8","#f2c230","#5aa84f"]; return (g,t)=>{ for(let k=0;k<n;k++){ const f=((t*.6+k*(40/n))%40)/40;
+      g.fillStyle=C[k%C.length]; g.fillRect(Math.round(x0+(x1-x0)*f)-1,Math.round(y0+(y1-y0)*f)-2,3,2); } }; },
+  tv(x,y,z,w,h){ const C=["#6fa8dc","#9fd27a","#f2c230","#e8893a","#c9a0dc"]; return (g,t,P)=>{ const [px,py]=P(x,y,z);
+      g.fillStyle=C[(t>>3)%C.length]; g.globalAlpha=.55; g.fillRect(px,py,w,h); g.globalAlpha=1; }; }
+};
+const AMB={
+  home:[FX.drip(0.45,1.5,21), FX.air(5.8,0.6,55), FX.led(5.3,0.05,12)],
+  apt:[FX.lamp(.4,2.3,46,30), FX.glint([[12.4,4.6,26],[12.9,5.2,22]]), FX.birds(18,2,400)],
+  school:[FX.drip(10.6,0.9,30,9), FX.butterfly(9.9,4.9,10,9,"#f2c230"), FX.butterfly(11,6.2,8,7,"#ffffff"), FX.birds(14,3,400)],
+  tower:[FX.butterfly(5.2,2.2,72,10,"#f2c230"), FX.glint([[7.2,4.6,40],[8.2,3.4,30],[6.5,5,22]],30), FX.birds(16,3,400)],
+  roofs:[FX.glint([[9.6,7.1,36],[10.3,7.6,34],[2.8,5.4,30]],24), FX.butterfly(1.5,8.5,6,8,"#ffffff"), FX.birds(14,3,400)],
+  shop:[FX.sparks(10.6,1.6,16), FX.glint([[1.3,3.3,28],[3.2,1.4,34]],22)],
+  recycle:[FX.belt(150,152,282,212,4), FX.glint([[10.6,4.8,14]],20), FX.birds(14,3,400)],
+  forest:[FX.smoke(5.25,0.4,42), FX.leaves(40,120,110,90,5), FX.leaves(262,360,120,90,5), FX.birds(12,3,400)]
+};
+let SA=null, SAt=0;
+function sceneAnimStart(id,info){ const c=document.getElementById("c-hanim"); c.width=info.W; c.height=info.H;
+  SA={id,P:info.P,g:c.getContext("2d"),fx:AMB[id]||[]}; SAt=0; sceneAnimDraw(); }
+function sceneAnimDraw(){ if(!SA) return; const g=SA.g; g.clearRect(0,0,g.canvas.width,g.canvas.height); SA.fx.forEach(f=>f(g,SAt,SA.P)); }
 let cur="map";
 const ro=w=>{const c=w.charCodeAt(w.length-1)-0xAC00, j=(c>=0&&c<11172)?c%28:0; return w+(j&&j!==8?"으로":"로");};
 
@@ -150,6 +195,7 @@ function drawScene(id){
   document.getElementById("v-home").style.setProperty("--ar",`${S.W}/${S.H}`);
   const info=S.draw(cv,sky());
   BOX=contentBox(cv);
+  sceneAnimStart(id,info);
   document.getElementById("l-home").innerHTML=S.items.map(it=>{
     const st=pct(info.P(...it.at),info.W,info.H);
     return it.href
@@ -205,7 +251,7 @@ function fit(){
       const W=view.clientWidth, H=view.clientHeight, s=Math.min(W/cv.width, H/cv.height);
       w=cv.width*s; h=cv.height*s; x=(W-w)/2; y=(H-h)/2 + (v==="v-map" && overlay ? Math.min(h*.04,(H-h)/2) : 0);
     }
-    const els=v==="v-map"?[cv,ly,...["c-sky","c-anim","c-obj"].map(i=>document.getElementById(i))]:[cv,ly];
+    const els=v==="v-map"?[cv,ly,...["c-sky","c-anim","c-obj"].map(i=>document.getElementById(i))]:[cv,document.getElementById("c-hanim"),ly];
     els.forEach(el=>Object.assign(el.style,{left:x+"px",top:y+"px",width:w+"px",height:h+"px"}));
   });
 }
@@ -282,7 +328,7 @@ show(V.SCENES[h0]?h0:"map");
 if(window.__mz){ const m=window.__mz; setTimeout(()=>Mosaic.run(m,false,()=>m.c.remove()),60); }
 addEventListener("resize",fit);
 const still=matchMedia("(prefers-reduced-motion: reduce)");
-let last=0; (function loop(ts){ requestAnimationFrame(loop); if(still.matches||cur!=="map"||document.hidden) return; if(ts-last<110) return; last=ts; ANIM.step(); ANIM.draw(); })(0);
+let last=0; (function loop(ts){ requestAnimationFrame(loop); if(still.matches||document.hidden) return; if(ts-last<110) return; last=ts; if(cur==="map"){ ANIM.step(); ANIM.draw(); } else { SAt++; sceneAnimDraw(); } })(0);
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{drawMapView(); if(cur!=="map") drawScene(cur);});
 </script>
 
