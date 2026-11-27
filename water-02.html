@@ -93,6 +93,15 @@ nav.pn span{visibility:hidden}
   .where .scene{width:120px}
   header.h .icon{width:64px; height:64px}
 }
+/* one nav box: [back][icon][title] */
+.nb{display:inline-flex; align-items:stretch; max-width:100%; border:2px solid var(--line); background:var(--paper); color:var(--ink)}
+.nb-back{display:flex; align-items:center; justify-content:center; width:46px; flex:none; border:0; border-right:2px solid var(--line); background:var(--paper); color:var(--ink); text-decoration:none; font:800 22px/1 "Gothic A1",sans-serif; padding:0 0 3px; cursor:pointer}
+.nb-back:hover,.nb-back:focus-visible{background:var(--tile); outline:none}
+.nb-ic{display:flex; align-items:center; flex:none; padding-left:12px}
+.nb-ic svg{width:24px; height:auto; display:block}
+.nb-t{margin:0; padding:9px 16px 9px 10px; font-size:clamp(17px,2.2vw,21px); font-weight:800; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0}
+.nb>.nb-t:first-child{padding-left:16px}
+.wrap>.nb{position:sticky; top:10px; z-index:20}
 /* photo + infographic slider */
 .gal{margin:24px 0 8px}
 .gwrap{position:relative}
@@ -117,7 +126,7 @@ nav.pn span{visibility:hidden}
 </head>
 <body class="water">
 <div class="wrap">
-  <a class="back" href="./#home">← 우리 집으로</a>
+  <nav class="nb" aria-label="이동"><a class="nb-back" href="./#home" aria-label="우리 집으로 돌아가기" title="우리 집으로 돌아가기">←</a><span class="nb-ic" id="nb-ic"></span><b class="nb-t">절수형 변기 사용하기</b></nav>
 
   <div class="where">
     <div class="scene"><canvas id="where-c" aria-hidden="true"></canvas></div>
@@ -218,6 +227,7 @@ function pix(rows){
 
 
 document.getElementById("icon").innerHTML=pix(ICON.toilet);
+document.getElementById("nb-ic").innerHTML=pix(ICON.toilet);
 (function(){
   const S=Village.SCENES["home"], cv=document.getElementById("where-c");
   const info=S.draw(cv, getComputedStyle(document.documentElement).getPropertyValue("--sky").trim());

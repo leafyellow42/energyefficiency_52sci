@@ -22,19 +22,24 @@ html,body{margin:0}
 body{background:var(--bg); color:var(--ink); font-family:"Gothic A1","Noto Sans KR",sans-serif; font-size:17px; line-height:1.6; word-break:keep-all}
 .water{--acc:var(--water)} .forest{--acc:var(--forest)} .mineral{--acc:var(--mineral)} .energy{--acc:var(--energy)}
 
-.stage{position:relative; height:calc(100svh - 150px); min-height:380px; background:var(--sky); border-bottom:2px solid var(--line); overflow:hidden}
+.stage{position:relative; height:100svh; min-height:380px; background:var(--sky); overflow:hidden}
 .view{position:absolute; inset:0}
 .view[hidden]{display:none}
 canvas{position:absolute; image-rendering:pixelated; image-rendering:crisp-edges}
 .layer{position:absolute}
-.title{position:absolute; z-index:3; bottom:16px; left:max(16px, env(safe-area-inset-left, 0px)); background:var(--paper); border:2px solid var(--line); padding:12px 18px 14px; max-width:min(440px, calc(100% - 32px))}
+.title{position:absolute; z-index:3; top:16px; left:max(16px, env(safe-area-inset-left, 0px)); max-width:min(440px, calc(100% - 32px))}
 .title .label{margin:0; font-size:13px; color:var(--sub); font-weight:500}
 .title h1{margin:2px 0 4px; font-size:clamp(20px,3vw,30px); line-height:1.2; font-weight:800}
 .title .hint{margin:0; font-size:14px; color:var(--sub)}
-.title button{font:inherit; font-size:14px; font-weight:700; border:2px solid var(--line); background:var(--paper); color:var(--ink); padding:3px 10px; margin-bottom:8px; cursor:pointer}
-.title button:hover{background:var(--tile)}
-.title h1.ph{display:flex; align-items:center; gap:10px}
-.picon{width:1.4em; height:1.3em; flex:none; background:var(--tile); border:2px solid var(--line); padding:3px; box-sizing:content-box}
+/* one nav box: [back][icon][title] */
+.nb{display:inline-flex; align-items:stretch; max-width:100%; border:2px solid var(--line); background:var(--paper); color:var(--ink)}
+.nb-back{display:flex; align-items:center; justify-content:center; width:46px; flex:none; border:0; border-right:2px solid var(--line); background:var(--paper); color:var(--ink); text-decoration:none; font:800 22px/1 "Gothic A1",sans-serif; padding:0 0 3px; cursor:pointer}
+.nb-back:hover,.nb-back:focus-visible{background:var(--tile); outline:none}
+.nb-ic{display:flex; align-items:center; flex:none; padding-left:12px}
+.nb-ic svg{width:24px; height:auto; display:block}
+.nb-t{margin:0; padding:9px 16px 9px 10px; font-size:clamp(17px,2.2vw,21px); font-weight:800; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0}
+.nb>.nb-t:first-child{padding-left:16px}
+.nb .picon{width:24px; height:22px; flex:none; align-self:center; margin-left:12px; display:block}
 
 /* triangle markers on the picture */
 .pin{position:absolute; transform:translate(-50%,-100%); display:block; width:22px; height:22px; background:none; border:0; padding:0; cursor:pointer; text-decoration:none}
@@ -62,11 +67,13 @@ canvas{position:absolute; image-rendering:pixelated; image-rendering:crisp-edges
 .list button.off{color:var(--sub); border-color:var(--off); cursor:default}
 .list button.off:hover{background:var(--paper)}
 .list button small{display:block; font-size:11px; font-weight:500; color:var(--sub)}
-footer{color:var(--sub); font-size:13px; padding:14px 16px 24px; text-align:center}
+.hits{position:absolute; z-index:3; right:max(12px, env(safe-area-inset-right, 0px)); bottom:12px; display:block; line-height:0; border:2px solid var(--line); background:#fff}
+.hits img{height:20px; display:block}
+.hits[hidden]{display:none}
 @media (max-width:900px){ .list{grid-template-columns:repeat(4,1fr)} }
 @media (max-width:720px){
   .stage{height:auto; min-height:0}
-  .title{position:static; border:0; border-bottom:2px solid var(--line); max-width:none}
+  .title{position:static; max-width:none; padding:10px 16px; background:var(--paper); border-bottom:2px solid var(--line)}
   .view{position:relative; inset:auto; aspect-ratio:var(--ar); overflow:hidden}
   .pin{width:16px; height:16px}
   .pin.off{width:12px; height:12px}
@@ -81,9 +88,8 @@ footer{color:var(--sub); font-size:13px; padding:14px 16px 24px; text-align:cent
   <div class="view" id="v-map" style="--ar:680/470"><canvas id="c-sky"></canvas><canvas id="c-map"></canvas><canvas id="c-anim"></canvas><canvas id="c-obj"></canvas><div class="layer" id="l-map"></div></div>
   <div class="view" id="v-home" style="--ar:400/330" hidden><canvas id="c-home"></canvas><div class="layer" id="l-home"></div></div>
   <div class="toast" id="toast" role="status"></div>
+  <a class="hits" href="https://hits.sh/leafyellow42.github.io/energyefficiency_52sci/" target="_blank" rel="noopener" aria-label="방문자 수"><img alt="방문자 수" src="https://hits.sh/leafyellow42.github.io/energyefficiency_52sci.svg?style=flat-square&amp;label=%EB%B0%A9%EB%AC%B8%EC%9E%90&amp;color=ffffff&amp;labelColor=ffffff"></a>
 </div>
-<div class="bar"><div class="in"><p>장소 목록</p><div class="list" id="list"></div></div></div>
-<footer>자원과 에너지의 효율적인 이용 방법은? · <a href="https://hits.sh/leafyellow42.github.io/energyefficiency_52sci/" target="_blank" rel="noopener"><img alt="방문자 수" src="https://hits.sh/leafyellow42.github.io/energyefficiency_52sci.svg?label=%EB%B0%A9%EB%AC%B8%EC%9E%90%20%EC%88%98&color=4f9a48" style="vertical-align:middle"></a></footer>
 
 <script src="village.js"></script>
 <script>
@@ -100,6 +106,7 @@ function drawMapView(){
   V.drawMap(document.getElementById("c-obj"),sky(),"objects");
   if(!ANIM){ ANIM=V.MapAnim(document.getElementById("c-sky"),document.getElementById("c-anim")); }
   ANIM.draw();
+  MBOX=alphaBox([document.getElementById("c-map"),document.getElementById("c-obj")]);
   document.getElementById("l-map").innerHTML=V.MAP_PLACES.map(p=>{
     const st=pct(info.P(...p.at),info.W,info.H);
     return `<button class="pin ${p.ready?"on":"off"}" data-place="${p.id}" style="${st}" title="${p.name}${p.ready?"":" (준비 중)"}" aria-label="${p.name}${p.ready?"":" (준비 중)"}">${TRI}</button>`;
@@ -117,7 +124,16 @@ function drawScene(id){
       : `<button class="pin off" data-soon="${it.name}" style="${st}" title="${it.name} (준비 중)" aria-label="${it.name} (준비 중)">${TRI}</button>`;
   }).join("");
 }
-let BOX=null;
+let BOX=null, MBOX=null;
+function alphaBox(cvs){
+  const W=cvs[0].width,H=cvs[0].height,ds=cvs.map(c=>c.getContext("2d").getImageData(0,0,W,H).data);
+  let x0=W,y0=H,x1=-1,y1=-1; const pts=[];
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=(y*W+x)*4+3; if(!ds.some(d=>d[i]>0)) continue;
+    if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; if(x%3===0&&y%3===0) pts.push(x,y);}
+  if(x1<0) return null;
+  const pad=6; x0=Math.max(0,x0-pad); y0=Math.max(0,y0-pad); x1=Math.min(W-1,x1+pad); y1=Math.min(H-1,y1+pad);
+  return {x:x0,y:y0,w:x1-x0+1,h:y1-y0+1,pts};
+}
 function contentBox(cv){
   const W=cv.width,H=cv.height,d=cv.getContext("2d").getImageData(0,0,W,H).data;
   const k=((H-1)*W+(W-1))*4, sr=d[k],sg=d[k+1],sb=d[k+2];
@@ -136,14 +152,15 @@ function fit(){
     const view=document.getElementById(v); if(view.hidden) return;
     const cv=document.getElementById(c), ly=document.getElementById(l);
     let x,y,w,h;
-    if(v==="v-home" && BOX){
+    const BOX_=v==="v-home"?BOX:MBOX;
+    if(BOX_){ const BOX=BOX_;
       if(!overlay) view.style.setProperty("--ar",`${BOX.w}/${BOX.h}`);
       const W=view.clientWidth, H=view.clientHeight;
       let s, cx=W/2, cy;
       if(overlay){
         // largest size, centred in the whole stage, whose drawn pixels stay clear of the title box
         const m=14, tl=tb.offsetLeft-m, tt=tb.offsetTop-m, tr=tb.offsetLeft+tb.offsetWidth+m, tbt=tb.offsetTop+tb.offsetHeight+m;
-        const top=12, Hav=H-tb.offsetHeight-16-12-top, sMin=Math.min(W*.96/BOX.w, Hav/BOX.h);
+        const top=tb.offsetTop+tb.offsetHeight+12, Hav=H-top-12, sMin=Math.min(W*.96/BOX.w, Hav/BOX.h);
         const sMax=Math.min(W*.96/BOX.w, (H-24)/BOX.h);
         const clear=sc=>{ const ox=cx-(BOX.x+BOX.w/2)*sc, oy=H/2-(BOX.y+BOX.h/2)*sc, P=BOX.pts;
           for(let i=0;i<P.length;i+=2){ const px=ox+P[i]*sc, py=oy+P[i+1]*sc; if(px>tl&&px<tr&&py>tt&&py<tbt) return false; } return true; };
@@ -153,7 +170,7 @@ function fit(){
       w=cv.width*s; h=cv.height*s; x=cx-(BOX.x+BOX.w/2)*s; y=cy-(BOX.y+BOX.h/2)*s;
     } else {
       const W=view.clientWidth, H=view.clientHeight, s=Math.min(W/cv.width, H/cv.height);
-      w=cv.width*s; h=cv.height*s; x=(W-w)/2; y=(H-h)/2 - (v==="v-map" && overlay ? h*.11 : 0);
+      w=cv.width*s; h=cv.height*s; x=(W-w)/2; y=(H-h)/2 + (v==="v-map" && overlay ? Math.min(h*.04,(H-h)/2) : 0);
     }
     const els=v==="v-map"?[cv,ly,...["c-sky","c-anim","c-obj"].map(i=>document.getElementById(i))]:[cv,ly];
     els.forEach(el=>Object.assign(el.style,{left:x+"px",top:y+"px",width:w+"px",height:h+"px"}));
@@ -174,14 +191,15 @@ const PAL={K:"#2b2c2f",R:"#d9534f",W:"#f7f4ec",B:"#7fb6dc",D:"#8a6040",G:"#4f9a4
 function iconSVG(id){const m=ICONS[id]; if(!m) return ""; let r="";
   m.forEach((row,y)=>[...row].forEach((ch,x)=>{ if(PAL[ch]) r+=`<rect x="${x}" y="${y}" width="1" height="1" fill="${PAL[ch]}"/>`; }));
   return `<svg class="picon" viewBox="0 0 12 11" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`;}
-const MAPT=`<p class="label">과학 탐구 활동 · 자원과 에너지</p><h1>자원·에너지의 효율적 활용</h1><p class="hint">깜빡이는 ▼ 표시를 눌러 들어가 보세요.</p>`;
+const MAPT=`<div class="nb"><h1 class="nb-t">자원·에너지의 효율적 활용</h1></div>`;
 function show(view){
   cur=view; const isMap=view==="map";
   document.getElementById("v-map").hidden=!isMap;
   document.getElementById("v-home").hidden=isMap;
+  const hb=document.querySelector(".hits"); if(hb) hb.hidden=!isMap;
   if(isMap){ document.getElementById("title").innerHTML=MAPT; }
   else { const S=V.SCENES[view]; drawScene(view);
-    document.getElementById("title").innerHTML=`<button type="button" id="back">← 마을로</button><h1 class="ph">${iconSVG(view)}<span>${S.name}</span></h1>`;
+    document.getElementById("title").innerHTML=`<div class="nb"><button type="button" class="nb-back" id="back" aria-label="마을로 돌아가기" title="마을로 돌아가기">←</button>${iconSVG(view)}<h1 class="nb-t">${S.name}</h1></div>`;
     document.getElementById("back").onclick=()=>{show("map"); try{history.replaceState(null,"",location.pathname+location.search);}catch(e){}};
     try{history.replaceState(null,"","#"+view);}catch(e){} }
   fit();
@@ -191,8 +209,8 @@ function openPlace(id){ const p=V.MAP_PLACES.find(x=>x.id===id); if(!p) return; 
 
 document.getElementById("l-map").addEventListener("click",e=>{const b=e.target.closest("[data-place]"); if(b) openPlace(b.dataset.place);});
 document.getElementById("l-home").addEventListener("click",e=>{const b=e.target.closest("[data-soon]"); if(b) toast(`'${b.dataset.soon}' 카드는 아직 준비 중이에요.`);});
-document.getElementById("list").innerHTML=V.MAP_PLACES.map(p=>`<button type="button" class="${p.ready?"":"off"}" data-place="${p.id}">${p.name}${p.ready?"":"<small>준비 중</small>"}</button>`).join("");
-document.getElementById("list").addEventListener("click",e=>{const b=e.target.closest("[data-place]"); if(b){openPlace(b.dataset.place); document.getElementById("stage").scrollIntoView({block:"start"});}});
+if(document.getElementById("list")){document.getElementById("list").innerHTML=V.MAP_PLACES.map(p=>`<button type="button" class="${p.ready?"":"off"}" data-place="${p.id}">${p.name}${p.ready?"":"<small>준비 중</small>"}</button>`).join("");
+document.getElementById("list").addEventListener("click",e=>{const b=e.target.closest("[data-place]"); if(b){openPlace(b.dataset.place); document.getElementById("stage").scrollIntoView({block:"start"});}});}
 
 drawMapView();
 const h0=location.hash.slice(1);
