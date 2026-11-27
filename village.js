@@ -738,17 +738,21 @@ function drawSchool(canvas,sky){
   box(6.2,.3,7.8,1.4,0,10,"#ffffff","#f2f2f2","#d4d4d4"); box(6.4,.4,7.6,1.3,10,3,"#d9dde1","#c4c9ce","#aeb4ba"); flat(6.6,.5,7.4,1.1,13,"#f6f2e6"); L([6.6,1.3,11.4],[7.4,1.3,11.4],"#2b2c2f"); dot(7.5,1.3,12,"#3cc45a");
   box(6.3,1.6,7.2,2.3,0,5,"#c7b38f","#b9a37b","#a08a63"); L([6.3,2.3,4],[7.2,2.3,4],"#8b6643"); Q([[6.45,2.3,1],[7,2.3,1],[7,2.3,3],[6.45,2.3,3]],"#4f9a48"); dot(6.6,2.3,2.4,"#ffffff",2,1);
   box(7.4,2,8,2.6,0,6,"#4f9a48","#5aa84f","#3f7f39",{hl:false}); flat(7.5,2.1,7.9,2.5,6,"#f6f2e6"); dot(7.6,2.6,3.4,"#ffffff",3,1); dot(7.65,2.6,4.4,"#ffffff",1,1);
-  // student desks in rows
-  for(let r=0;r<3;r++) for(let c=0;c<3;c++){ const x=1.2+c*2.2, y=4+r*1.9;
+  // bookshelf against the side wall (behind the desks)
+  box(.2,8.2,1,9.8,0,16,"#a87f53","#c49a6c","#8b6643"); for(let z=0;z<15;z+=5.2){ if(z) L([1,8.2,z],[1,9.8,z],"#6f4f33"); [["#d9534f",8.4],["#3b82c4",8.7],["#f2c230",9],["#4f9a48",9.3]].forEach(([c,y])=>Q([[1,y,z+.5],[1,y+.2,z+.5],[1,y+.2,z+4],[1,y,z+4]],c)); }
+  // student desks in rows (drawn back-to-front together with the kids so nothing floats on a desk)
+  const dr=[];
+  for(let r=0;r<3;r++) for(let c=0;c<3;c++){ const x=1.2+c*2.2, y=4+r*1.9; dr.push({k:x+.7+y+.8, f:()=>{
     Q([[x,y+.7,0],[x+1.4,y+.7,0],[x+1.4,y+1.2,0],[x,y+1.2,0]],"rgba(0,0,0,.1)");
     L([x+.1,y+.7,0],[x+.1,y+.7,8],"#7d838b"); L([x+1.3,y+.7,0],[x+1.3,y+.7,8],"#7d838b");
     box(x,y,x+1.4,y+.75,8,.7,"#e8d7b5","#d9c59d","#c4ae83",{hl:false});
-    box(x+.35,y+1,x+1.05,y+1.5,0,5,"#5b8bb8","#6b9bc6","#4f7aa3",{hl:false}); box(x+.35,y+1.4,x+1.05,y+1.55,5,4,"#5b8bb8","#6b9bc6","#4f7aa3",{hl:false});
     const k=(r*3+c)%4; if(k!==3){ flat(x+.2,y+.15,x+.75,y+.55,8.7,["#ffffff","#f6f2e6","#b9dfae"][k]); L([x+.25,y+.3,8.7],[x+.65,y+.3,8.7],"#9aa0a6"); }
-    if(k===1) box(x+.9,y+.2,x+1.2,y+.5,8.7,.8,C.red,C.red,"#a83a35",{hl:false,ol:false}); }
-  bigPerson(g,P,3.9,7.6,0,"#f2c230"); bigPerson(g,P,1.8,9.4,0,"#d9534f","#6b4a2e");
+    if(k===1) box(x+.9,y+.2,x+1.2,y+.5,8.7,.8,C.red,C.red,"#a83a35",{hl:false,ol:false}); }});
+    dr.push({k:x+.7+y+1.3, f:()=>{ box(x+.35,y+1,x+1.05,y+1.5,0,5,"#5b8bb8","#6b9bc6","#4f7aa3",{hl:false}); box(x+.35,y+1.4,x+1.05,y+1.55,5,4,"#5b8bb8","#6b9bc6","#4f7aa3",{hl:false}); }}); }
+  dr.push({k:3.05+6.75, f:()=>bigPerson(g,P,3.05,6.75,0,"#f2c230")});
+  dr.push({k:5.2+9.75, f:()=>bigPerson(g,P,5.2,9.75,0,"#d9534f","#6b4a2e")});
+  dr.sort((a,b)=>a.k-b.k).forEach(d=>d.f());
   // classroom plant + bookshelf
-  box(.2,8.2,1,9.8,0,16,"#a87f53","#c49a6c","#8b6643"); for(let z=5;z<16;z+=5.2){ L([1,8.2,z],[1,9.8,z],"#6f4f33"); [["#d9534f",8.4],["#3b82c4",8.7],["#f2c230",9],["#4f9a48",9.3]].forEach(([c,y])=>Q([[1,y,z+.5],[1,y+.2,z+.5],[1,y+.2,z+4],[1,y,z+4]],c)); }
   box(7.4,8.8,8,9.4,0,3,"#c97a5c","#b5654a","#9a4f39"); tree(7.7,9.1,3,3.6,1);
   // outside: downspout from the roof into the rain barrel, watering can, raised vegetable beds, kids
   box(8.4,0,12.6,.5,61,2,"#c4c8cc","#d6dadf","#9aa0a6",{hl:false}); box(10.25,.05,10.6,.4,16,45,"#c4c8cc","#b5bbc1","#8f979e",{hl:false}); for(let z=24;z<60;z+=12) box(10.2,0,10.65,.45,z,.8,"#9aa0a6","#9aa0a6","#7d838b",{hl:false,ol:false});
@@ -1086,7 +1090,7 @@ function drawForest(canvas,sky){
      g.fillStyle="#c49a6c"; g.fillRect(p[0]-1,p[1]-1,3,2); if((k+r)%2===0){ g.fillStyle="#2e7d4f"; g.fillRect(p[0]+1,p[1]-3,2,2);} } });
   // forest trees (varied species and sizes)
   const T=[[8.2,-.3,"p",4.4],[9.6,-.2,"t",6.5,1],[11,-.3,"p",5],[12.4,-.2,"t",6,0],[12.4,1.6,"b",3.4],[11.4,1.4,"p",4.6],[11.2,3.2,"t",6.5,0],[12.4,4.2,"p",4.2],[10.2,6,"t",5.5,2],[12.2,6.2,"t",6,1],[11.4,7.4,"p",3.6],[12.3,8.4,"b",3.8],[10.2,9.6,"t",4.6,1],[8.4,9.6,"b",3]];
-  { const F=rng(5); for(let i=0;i<140;i++){ const x=7.9+F()*4.9, y=-.4+F()*10.6; if(x<10.6&&y>.2&&y<3.4) continue; if(Math.abs(y-(6.4+(x-7.4)*1.0))<.8&&y>6) continue; if(x-y<3.4) continue; if(x-y<6.6&&x+y<13.5) continue; if(T.some(t=>Math.hypot(t[0]-x,t[1]-y)<.75)) continue; const k=F(); T.push(k<.4?[x,y,"p",3+F()*2]: k<.55?[x,y,"b",2.6+F()*1.4]:[x,y,"t",5.5+F()*3,F()<.6?1:(F()<.5?0:2)]); }
+  { const F=rng(5); for(let i=0;i<140;i++){ const x=7.9+F()*4.3, y=-.4+F()*10.1; if(x<10.6&&y>.2&&y<3.4) continue; if(Math.abs(y-(6.4+(x-7.4)*1.0))<.8&&y>6) continue; if(x-y<3.4) continue; if(x-y<6.6&&x+y<13.5) continue; if(T.some(t=>Math.hypot(t[0]-x,t[1]-y)<.75)) continue; const k=F(); T.push(k<.4?[x,y,"p",3+F()*2]: k<.55?[x,y,"b",2.6+F()*1.4]:[x,y,"t",5.5+F()*3,F()<.6?1:(F()<.5?0:2)]); }
     [[-.2,6.6,"t",6,1],[.2,8,"p",3.6],[-.3,9.4,"t",5.5,0],[.6,10,"b",2.8]].forEach(t=>T.push(t)); }
   T.forEach(([x,y,k,s,v])=>add(x,y,()=> k==="p"?pine(x,y,s): k==="b"?birch(x,y,s): tree(x,y,0,s,v)));
   [[8.6,8.4],[10.2,4],[8.2,3.6],[12.4,7.2],[9.6,7.4]].forEach(([x,y])=>add(x,y,()=>bush(x,y)));
@@ -1105,6 +1109,14 @@ function drawForest(canvas,sky){
   add(7.6,4.6,()=>{ box(7.2,4.2,8.4,5,1,1.6,"#8b6643","#a87f53","#7a5232",{hl:false}); for(let i=0;i<8;i++) dot(7.3+R()*1,4.3+R()*.6,2.7,R()<.5?"#e3c08e":"#c49a6c",2,1); dot(7.5,5,.6,"#2b2c2f",3,3); dot(8.1,5,.6,"#2b2c2f",3,3); L([7.2,4.6,2.4],[6.6,4.6,4],"#5e3f27"); });
   flowers(8,6.2,12.4,9.8,30,31); flowers(0,7.6,7,10,14,32);
   objs.sort((a,b)=>a[0]-b[0]).forEach(o=>o[1]());
+  // tidy: remove tree shadows that spill past the ground block onto the sky
+  { const hex=[P(-.6,-.6,0),P(12.8,-.6,0),P(12.8,-.6,-6),P(12.8,10.2,-6),P(-.6,10.2,-6),P(-.6,10.2,0)];
+    const inside=(x,y)=>{ let c=false; for(let a=0,b=hex.length-1;a<hex.length;b=a++){ const [xa,ya]=hex[a],[xb,yb]=hex[b]; if((ya>y)!==(yb>y) && x<(xb-xa)*(y-ya)/(yb-ya)+xa) c=!c; } return c; };
+    const im=g.getImageData(0,0,HOUSE.W,HOUSE.H), d=im.data, sk=[parseInt(sky.slice(1,3),16),parseInt(sky.slice(3,5),16),parseInt(sky.slice(5,7),16)];
+    const sh=[sk]; for(let n=1;n<5;n++){ const q=sh[n-1]; sh.push([Math.round(q[0]*.72+35*.28),Math.round(q[1]*.72+45*.28),Math.round(q[2]*.72+25*.28)]); }
+    for(let y=0;y<HOUSE.H;y++)for(let x=0;x<HOUSE.W;x++){ if(inside(x+.5,y+.5)) continue; const o=(y*HOUSE.W+x)*4;
+      if(sh.slice(1).some(c=>Math.abs(c[0]-d[o])<3&&Math.abs(c[1]-d[o+1])<3&&Math.abs(c[2]-d[o+2])<3)){ d[o]=sk[0]; d[o+1]=sk[1]; d[o+2]=sk[2]; } }
+    g.putImageData(im,0,0); }
   return {P:D.P, W:HOUSE.W, H:HOUSE.H};
 }
 const SCENES={
