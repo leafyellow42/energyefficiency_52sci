@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>충전식 건전지</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4efe3; --paper:#ffffff; --tile:#faf8f3; --ink:#2b2c2f; --sub:#6a6760; --line:#45464a;
+  --sky:#dfeef2; --hill:#6f9e5a; --hill-d:#55824a; --grass:#a9cf7f; --road:#c9c2b2;
+  --water:#3b82c4; --water-l:#a9d3f0;
+  --forest:#4f9a48; --forest-l:#b9dfae;
+  --mineral:#8a7560; --mineral-l:#d3c6b6;
+  --energy:#e0a91b; --energy-l:#f7e08a;
+  --px-k:#2b2c2f; --px-w:#ffffff; --px-g:#9aa0a6; --px-c:#bfe0f2; --px-u:#4a90c8; --px-d:#2f5d8a;
+  --px-e:#5aa84f; --px-f:#9ccf6b; --px-y:#f2c230; --px-o:#e8893a; --px-r:#d9534f; --px-n:#8b5e3c; --px-m:#c49a6c;
+  --wall:#f3e6c9; --brick:#b5654a;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#1d1e1b; --paper:#262724; --tile:#2c2d2a; --ink:#ecebe4; --sub:#a9a69d; --line:#9c9a93;
+    --sky:#25343c; --hill:#4c7340; --hill-d:#3d5f35; --grass:#5f8546; --road:#5b574e;
+    --px-k:#1b1c1e; --wall:#d9ccb0;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#1d1e1b; --paper:#262724; --tile:#2c2d2a; --ink:#ecebe4; --sub:#a9a69d; --line:#9c9a93;
+  --sky:#25343c; --hill:#4c7340; --hill-d:#3d5f35; --grass:#5f8546; --road:#5b574e;
+  --px-k:#1b1c1e; --wall:#d9ccb0;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg); color:var(--ink); font-family:"Gothic A1","Noto Sans KR",sans-serif; font-size:18px; line-height:1.8; word-break:keep-all}
+.wrap{max-width:760px; margin:0 auto; padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); padding-block:24px 56px}
+svg.px{display:block; shape-rendering:crispEdges}
+.water{--acc:var(--water); --acc-l:var(--water-l)} .forest{--acc:var(--forest); --acc-l:var(--forest-l)} .mineral{--acc:var(--mineral); --acc-l:var(--mineral-l)} .energy{--acc:var(--energy); --acc-l:var(--energy-l)}
+a.back{display:inline-block; color:var(--ink); text-decoration:none; font-weight:700; font-size:15px; border:2px solid var(--line); background:var(--paper); padding:4px 12px}
+a.back:hover{background:var(--tile)}
+
+/* place strip */
+.where{margin-top:18px; display:flex; align-items:stretch; border:2px solid var(--line); background:var(--paper)}
+.where .scene{width:200px; flex:none; background:var(--sky); border-right:2px solid var(--line)}
+.where .scene{position:relative; overflow:hidden; min-height:110px}
+.where .scene canvas{position:absolute; width:190%; height:auto; image-rendering:pixelated; image-rendering:crisp-edges}
+.cat{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--ink)}
+.cat i{width:10px; height:10px; background:var(--acc)}
+.where .txt{padding:12px 16px; display:flex; flex-direction:column; justify-content:center}
+.where .txt p{margin:0; font-size:14px; color:var(--sub); line-height:1.5}
+.where .txt b{display:inline-flex; align-items:center; gap:6px; color:var(--ink); font-size:15px}
+
+
+/* heading */
+header.h{display:flex; align-items:center; gap:18px; margin:30px 0 8px; padding-bottom:14px; border-bottom:4px solid var(--acc)}
+header.h .icon{width:84px; height:84px; flex:none; border:2px solid var(--line); background:var(--paper); display:flex; align-items:center; justify-content:center}
+header.h .icon svg{width:62%}
+header.h .no{margin:0; font-size:14px; color:var(--sub); font-weight:700; letter-spacing:.04em}
+header.h h1{margin:0; font-size:clamp(28px,6vw,38px); line-height:1.2; font-weight:800}
+
+article p{margin:20px 0}
+figure{margin:28px 0}
+.ph{border:2px dashed var(--line); background:var(--tile); aspect-ratio:16/8; display:flex; align-items:center; justify-content:center; color:var(--sub); font-size:15px; text-align:center; padding:12px}
+figcaption{font-size:14px; color:var(--sub); margin-top:6px}
+h2.sec{font-size:20px; font-weight:800; margin:40px 0 12px; display:flex; align-items:center; gap:8px}
+h2.sec::before{content:""; width:12px; height:12px; background:var(--acc)}
+.vids figure{margin:0 0 22px}
+.video{position:relative; aspect-ratio:16/9; border:2px solid var(--line); background:var(--tile)}
+.video iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.video .ph{position:absolute; inset:0; aspect-ratio:auto; border:0}
+.gloss{border:2px solid var(--line); background:var(--paper); padding:6px 18px}
+.gloss dl{margin:0}
+.gloss div{padding:10px 0; border-bottom:1px solid var(--road)}
+.gloss div:last-child{border-bottom:0}
+.gloss dt{font-weight:800; display:inline}
+.gloss dd{display:inline; margin:0 0 0 8px; color:var(--ink)}
+.src{font-size:14px; color:var(--sub); padding-left:20px}
+nav.pn{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:44px}
+nav.pn a{border:2px solid var(--line); background:var(--paper); color:var(--ink); text-decoration:none; padding:12px 14px; font-weight:700; font-size:16px; line-height:1.4}
+nav.pn a small{display:block; color:var(--sub); font-weight:500; font-size:13px}
+nav.pn a.next{text-align:right}
+nav.pn a:hover{background:var(--tile)}
+nav.pn span{visibility:hidden}
+@media (max-width:520px){
+  .where .scene{width:120px}
+  header.h .icon{width:64px; height:64px}
+}
+.note{font-size:15px; color:var(--sub); margin:0 0 12px}
+</style>
+</head>
+<body class="mineral">
+<div class="wrap">
+  <a class="back" href="./#shop">← 가전 매장과 수리점으로</a>
+
+  <div class="where">
+    <div class="scene"><canvas id="where-c" aria-hidden="true"></canvas></div>
+    <div class="txt"><p>지금 탐험하는 곳</p><b>가전 매장과 수리점 · 계산대 옆</b><p style="margin-top:4px"><span class="cat"><i></i>광물 자원</span></p></div>
+  </div>
+
+  <header class="h">
+    <div class="icon" id="icon"></div>
+    <div><p class="no">광물 자원 02</p><h1>충전식 건전지</h1></div>
+  </header>
+
+  <article>
+    <p>충전식 건전지는 다 쓴 뒤 충전기에 꽂아 다시 쓸 수 있는 건전지입니다. 보통 건전지는 안에 든 물질이 화학 반응을 하며 전기를 만들고, 반응이 끝나면 되돌릴 수 없습니다. 충전식 건전지는 전기를 넣어 주면 이 반응이 거꾸로 일어나 다시 전기를 낼 수 있는 상태로 돌아갑니다.</p>
+    <figure><div class="ph">사진 자리<br>AA 충전지와 충전기</div><figcaption>사진과 출처는 다음 단계에서 넣습니다.</figcaption></figure>
+    <p>충전식 건전지 하나는 보통 수백 번 이상 다시 쓸 수 있습니다. 그만큼 건전지를 만드는 데 드는 아연, 니켈 같은 금속을 아끼고, 버려지는 폐건전지도 크게 줄일 수 있습니다. 리모컨, 무선 마우스, 장난감처럼 건전지를 자주 바꾸는 물건에 쓰면 효과가 큽니다.</p>
+    <p>처음에는 충전기와 건전지를 사는 데 돈이 더 듭니다. 또 충전식 건전지는 전압이 보통 건전지(1.5V)보다 조금 낮은 1.2V여서, 일부 기기에서는 잘 맞지 않을 수 있습니다. 오래 쓰지 않으면 저절로 전기가 조금씩 빠져나가고, 수명이 다하면 일반 쓰레기가 아니라 폐건전지 수거함에 넣어야 합니다.</p>
+  </article>
+
+  <h2 class="sec">사진으로 더 보기</h2>
+  <p class="note">이 주제는 알맞은 영상이 없어 사진 자료로 대신합니다.</p>
+  <figure><div class="ph">사진 자리<br>AA 충전지와 충전기 (가까이서 본 모습)</div><figcaption>사진과 출처는 다음 단계에서 넣습니다.</figcaption></figure>
+
+  <h2 class="sec">낱말 풀이</h2>
+  <div class="gloss"><dl>
+    <div><dt>충전</dt><dd>전기를 다시 채워 넣는 것.</dd></div>
+    <div><dt>전압</dt><dd>전기를 밀어 보내는 힘의 크기. 단위는 V(볼트).</dd></div>
+    <div><dt>폐건전지</dt><dd>다 써서 버리는 건전지.</dd></div>
+  </dl></div>
+
+  <h2 class="sec">출처</h2>
+  <ul class="src"><li>출처는 사진을 넣을 때 기관·언론 자료로 함께 정리합니다.</li></ul>
+
+  <nav class="pn">
+    <span></span>
+    <a class="next" href="mineral-03.html"><small>다음 카드</small>고쳐 쓰기 쉬운 제품 →</a>
+  </nav>
+</div>
+<script src="village.js"></script>
+<script>
+const ICON = {
+  faucet:["...kkkkk....","....kgk.....","kkkkkgkkkk..","kggggggggkk.","kkkkkkkkggk.",".......kggk.",".......kkkk.","............","........b...",".......bab..",".......aaa..","........a..."],
+  toilet:["...kkkkk....","...kwwwk....","...kwwwk....","...kkkkk....","kkkkkkkkkkk.","kwwwwwwwwwk.","kwbbbbbbbwk.",".kwwwwwwwk..","..kkwwwkk...","...kwwwk....","...kwwwk....","..kkkkkkk..."],
+  rain:["...kkkk.....","..kwwwwkk...",".kwwwwwwwk..",".kkkkkkkkk..","..a..a..a...","............","...a..a.....","..kkkkkkk...","..kbbbbbk...","..kaaaaak...","..kaaaaak...","..kkkkkkk..."],
+  grey:["..g......a..",".ggg....aaa.",".ggg.k..aaa.","ggggg.kaaaaa","gggggk.aaaaa",".ggg....aaa."],
+  fsc:[".kkkkkkkkk..",".kwwwwwwwk..",".kwwwawwwk..",".kwwaaawwk..",".kwaaaaawk..",".kwwaaawwk..",".kwaaaaawk..",".kwwwnwwwk..",".kwwwnwwwk..",".kwgggggwk..",".kwwwwwwwk..",".kkkkkkkkk.."],
+  recycled:["...aaaaa....","..a.....a...",".a.......a..",".a......aaa.",".a.......a..","............",".kkkkkkkkkk.",".kwwwwwwwwk.",".kkkkkkkkkk.",".kwwwwwwwwk.",".kkkkkkkkkk."],
+  pellet:[".........aa.","........aab.","........a...","....nn......","...nmmn.....","...nmmn.nn..","....nn.nmmn.",".nn....nmmn.","nmmn.nn.nn..","nmmnnmmn....",".nn.nmmn.nn.",".....nn.nmmn"],
+  urbanmine:["kkkkkk......","kbwbbk......","kbbbbk......","kbbbbk......","kbbbbk......","kbbbbk......","kggggk......","kkkkkk.yyyy.",".......oooo.","...yyyy.yyyy","...oooo.oooo"],
+  battery:["....kkkk....","..kkkkkkkk..","..kwwwwwwk..","..kwwwyywk..","..kwwyywwk..","..kwyyyywk..","..kwwyywwk..","..kwyywwwk..","..kwwwwwwk..","..kaaaaaak..","..kaaaaaak..","..kkkkkkkk.."],
+  repair:["........g..g","........g.gg","........gggg",".......ggg..","......ggg...",".....ggg....","....ggg.....","...aaa......","..aaa.......",".aaa........","aaa.........","aa.........."],
+  can:["...gggggg...","..kkkkkkkk..","..kwwwwwwk..","..kaaaaaak..","..kaawwaak..","..kaawwaak..","..kaaaaaak..","..kwwwwwwk..","..kkkkkkkk..","...gggggg..."],
+  grade:[".kkkkkkkkkk.",".kaaaaaaaak.",".kweewwwwwk.",".kwfffwwwwk.",".kwyyyywwwk.",".kwooooowwk.",".kwrrrrrrwk.",".kwwwwwwwwk.",".kkkkkkkkkk."],
+  erv:[".kkkkkkkkkk.",".kwwwwwwwwk.",".kwwwwwrwwk.",".kwrrrrrrwk.",".kwwwwwrwwk.",".kwwuwwwwwk.",".kwuuuuuuwk.",".kwwuwwwwwk.",".kwwwwwwwwk.",".kkkkkkkkkk."],
+  coolroof:["yy.......a..","yy......a...",".....kk.....","....kwwk....","...kwwwwk...","..kwwwwwwk..",".kkkkkkkkkk.","..kbbbbbbk..","..kbkkbbbk..","..kbkkbbbk..","..kkkkkkkk.."],
+  sensor:["....kkkk....","...kyyyyk...","a.kywyyyyk.a","a.kyyyyyyk.a","..kyyyyyyk..","...kyyyyk...","....kggk....","....kggk....",".....kk....."],
+  plug:["...aaaaaa...","..a......a..","....aaaa....","...a....a...",".....aa.....","............","....k..k....","....k..k....","..kkkkkkkk..","..kwwwwwwk..","..kwwwwwwk..","...kkkkkk...",".....kk....."],
+  bubble:["kkkkkkkkkkkk","kcccccccccck","kcwwcwwcwwck","kcwwcwwcwwck","kcccccccccck","kcwwcwwcwwck","kcwwcwwcwwck","kcccccccccck","kcwwcwwcwwck","kcwwcwwcwwck","kcccccccccck","kkkkkkkkkkkk"],
+  door:["..kkkkkkk...","..knnnnnka..","..knmmmnka..","..knmmmnka..","..knnnnnka..","..knnnnyka..","..knmmmnka..","..knmmmnka..","..knnnnnka..","..kkkkkkka.."],
+  awning:["kkkkkkkkkkkk","kawawawawawk","kawawawawawk",".kkkkkkkkkk.","..g.g.g.g...",".kkkkkkkkkk.",".kcccckccck.",".kcccckccck.",".kkkkkkkkkk.",".kcccckccck.",".kkkkkkkkkk."],
+  greenroof:["..e...e..e..",".eee.eee.ee.",".eeeeeeeeee.",".kkkkkkkkkk.",".kwwwwwwwwk.",".kwccwwccwk.",".kwccwwccwk.",".kwwwwwwwwk.",".kwccwwccwk.",".kwccwwccwk.",".kwwwwwwwwk.",".kkkkkkkkkk."],
+  balcony:["yy..........","yy..........","..kkkkkkkkk.","..kdddkdddk.","..kdddkdddk.","..kkkkkkkkk.","..kdddkdddk.","..kkkkkkkkk.","......k.....","kkkkkkkkkkkk","k.k.k.k.k.k.","k.k.k.k.k.k.","kkkkkkkkkkkk"],
+  solarwater:["....yyyy....","...yyyyyy...","...yyyyyy...","....yyyy....","............",".kkkkkkkkkk.",".kwwwwwwwwk.",".koooooooook.".slice(0,12),".koooooooook.".slice(0,12),".kkkkkkkkkk.","..k......k..","..k......k.."],
+  fridge:["..kkkkkkkk..","..kwcwwwwk..","..kwwwwgwk..","..kwwwwgwk..","..kkkkkkkk..","..kwwwwwwk..","..kwwwwgwk..","..kwwwwgwk..","..kwwwwgwk..","..kwwwwwwk..","..kkkkkkkk..","...k....k..."],
+  aircon:["kkkkkkkkkkkk","kwwwwwwwwwak","kwwwwwwwwwwk","kggggggggggk","kkkkkkkkkkkk","............","..c..c..c...","...c..c..c..","..c..c..c...","...c..c..c.."],
+  /* category emblems */
+  e_water:["...a...","..aaa..",".abaaa.","aabaaaa","aaaaaaa",".aaaaa.","..aaa.."],
+  e_forest:["..aaa..",".aaaaa.","aaabaaa","aaaaaaa",".aaaaa.","...n...","...n..."],
+  e_mineral:[".aaaaa.","abababa","aaaaaaa",".aaaaa.","..aaa..","...a..."],
+  e_energy:["....aa.","...aa..","..aa...",".aaaaa.","...aa..","..aa...",".aa...."]
+};
+ICON.solarwater[7]=".koooooooook".slice(0,11)+"."; ICON.solarwater[8]=ICON.solarwater[7];
+
+
+const PX = {k:"--px-k",w:"--px-w",g:"--px-g",c:"--px-c",u:"--px-u",d:"--px-d",e:"--px-e",f:"--px-f",y:"--px-y",o:"--px-o",r:"--px-r",n:"--px-n",m:"--px-m",a:"--acc",b:"--acc-l"};
+function pix(rows){
+  let minX=99,minY=99,maxX=-1,maxY=-1,out="";
+  rows.forEach((row,y)=>{[...row].forEach((ch,x)=>{
+    if(ch==="."||!PX[ch])return;
+    minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);
+    out+=`<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="var(${PX[ch]})"/>`;
+  })});
+  const w=maxX-minX+1,h=maxY-minY+1,s=Math.max(w,h);
+  return `<svg class="px" viewBox="${minX-(s-w)/2} ${minY-(s-h)/2} ${s} ${s}" aria-hidden="true">${out}</svg>`;
+}
+
+
+
+document.getElementById("icon").innerHTML=pix(ICON.battery);
+(function(){
+  const S=Village.SCENES["shop"], cv=document.getElementById("where-c");
+  const info=S.draw(cv, getComputedStyle(document.documentElement).getPropertyValue("--sky").trim());
+  const it=S.items.find(x=>x.id==="battery"); if(!it) return;
+  const p=info.P(...it.at), box=cv.parentElement;
+  const place=()=>{ const bw=box.clientWidth, bh=box.clientHeight, w=bw*1.9, sc=w/info.W;
+    cv.style.left=Math.min(0,Math.max(bw-w, bw/2-p[0]*sc))+"px"; cv.style.top=Math.min(0,Math.max(bh-info.H*sc, bh*.62-p[1]*sc))+"px"; };
+  place(); addEventListener("resize",place);
+})();
+</script>
+</body>
+</html>

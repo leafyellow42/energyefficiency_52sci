@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>자원·에너지의 효율적 활용</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4efe3; --paper:#ffffff; --tile:#faf8f3; --ink:#2b2c2f; --sub:#6a6760; --line:#45464a; --sky:#dcecf3;
+  --water:#3b82c4; --forest:#4f9a48; --mineral:#8a7560; --energy:#e0a91b; --off:#b9b5ab;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ color-scheme:dark; --bg:#1d1e1b; --paper:#262724; --tile:#2c2d2a; --ink:#ecebe4; --sub:#a9a69d; --line:#9c9a93; --sky:#22303a; --off:#5d5b55; }
+}
+:root[data-theme="dark"]{ color-scheme:dark; --bg:#1d1e1b; --paper:#262724; --tile:#2c2d2a; --ink:#ecebe4; --sub:#a9a69d; --line:#9c9a93; --sky:#22303a; --off:#5d5b55; }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg); color:var(--ink); font-family:"Gothic A1","Noto Sans KR",sans-serif; font-size:17px; line-height:1.6; word-break:keep-all}
+.water{--acc:var(--water)} .forest{--acc:var(--forest)} .mineral{--acc:var(--mineral)} .energy{--acc:var(--energy)}
+
+.stage{position:relative; height:calc(100svh - 150px); min-height:380px; background:var(--sky); border-bottom:2px solid var(--line); overflow:hidden}
+.view{position:absolute; inset:0}
+.view[hidden]{display:none}
+canvas{position:absolute; image-rendering:pixelated; image-rendering:crisp-edges}
+.layer{position:absolute}
+.title{position:absolute; z-index:3; bottom:16px; left:max(16px, env(safe-area-inset-left, 0px)); background:var(--paper); border:2px solid var(--line); padding:12px 18px 14px; max-width:min(440px, calc(100% - 32px))}
+.title .label{margin:0; font-size:13px; color:var(--sub); font-weight:500}
+.title h1{margin:2px 0 4px; font-size:clamp(20px,3vw,30px); line-height:1.2; font-weight:800}
+.title .hint{margin:0; font-size:14px; color:var(--sub)}
+.title button{font:inherit; font-size:14px; font-weight:700; border:2px solid var(--line); background:var(--paper); color:var(--ink); padding:3px 10px; margin-bottom:8px; cursor:pointer}
+.title button:hover{background:var(--tile)}
+.title h1.ph{display:flex; align-items:center; gap:10px}
+.picon{width:1.4em; height:1.3em; flex:none; background:var(--tile); border:2px solid var(--line); padding:3px; box-sizing:content-box}
+
+/* triangle markers on the picture */
+.pin{position:absolute; transform:translate(-50%,-100%); display:block; width:22px; height:22px; background:none; border:0; padding:0; cursor:pointer; text-decoration:none}
+.pin svg{display:block; width:100%; height:100%; overflow:visible}
+.pin polygon{stroke:#2b2c2f; stroke-width:2.2; stroke-linejoin:miter}
+.pin.on polygon{fill:#f2c230}
+.pin.on{animation:bob 1s steps(2) infinite}
+.pin.on svg{animation:blink 1s steps(1) infinite}
+.pin.off polygon{fill:#ffffff; stroke:#8d8a83}
+.pin.off{opacity:.75; width:16px; height:16px}
+.pin:focus-visible{outline:2px solid var(--line); outline-offset:3px}
+@keyframes blink{60%{opacity:.25}}
+@keyframes bob{50%{transform:translate(-50%,-100%) translateY(-3px)}}
+@media (prefers-reduced-motion:reduce){.pin.on,.pin.on svg{animation:none}}
+.toast{position:absolute; z-index:4; left:50%; top:16px; transform:translateX(-50%); background:var(--paper); border:2px solid var(--line); padding:6px 14px; font-size:14px; font-weight:700; opacity:0; transition:opacity .15s; pointer-events:none}
+.toast.show{opacity:1}
+
+/* place list */
+.bar{background:var(--paper); padding:12px max(16px, env(safe-area-inset-right, 0px)) 14px max(16px, env(safe-area-inset-left, 0px))}
+.bar .in{max-width:1100px; margin:0 auto}
+.bar p{margin:0 0 8px; font-size:13px; color:var(--sub); font-weight:700}
+.list{display:grid; grid-template-columns:repeat(8,1fr); gap:8px}
+.list button{font:inherit; font-size:14px; font-weight:700; line-height:1.3; border:2px solid var(--line); background:var(--paper); color:var(--ink); padding:8px 6px; cursor:pointer; min-height:48px}
+.list button:hover,.list button:focus-visible{background:var(--tile); outline:none}
+.list button.off{color:var(--sub); border-color:var(--off); cursor:default}
+.list button.off:hover{background:var(--paper)}
+.list button small{display:block; font-size:11px; font-weight:500; color:var(--sub)}
+footer{color:var(--sub); font-size:13px; padding:14px 16px 24px; text-align:center}
+@media (max-width:900px){ .list{grid-template-columns:repeat(4,1fr)} }
+@media (max-width:720px){
+  .stage{height:auto; min-height:0}
+  .title{position:static; border:0; border-bottom:2px solid var(--line); max-width:none}
+  .view{position:relative; inset:auto; aspect-ratio:var(--ar); overflow:hidden}
+  .pin{width:16px; height:16px}
+  .pin.off{width:12px; height:12px}
+  .list{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="title" id="title"></div>
+  <div class="view" id="v-map" style="--ar:680/470"><canvas id="c-sky"></canvas><canvas id="c-map"></canvas><canvas id="c-anim"></canvas><canvas id="c-obj"></canvas><div class="layer" id="l-map"></div></div>
+  <div class="view" id="v-home" style="--ar:400/330" hidden><canvas id="c-home"></canvas><div class="layer" id="l-home"></div></div>
+  <div class="toast" id="toast" role="status"></div>
+</div>
+<div class="bar"><div class="in"><p>장소 목록</p><div class="list" id="list"></div></div></div>
+<footer>자원과 에너지의 효율적인 이용 방법은? · <a href="https://hits.sh/leafyellow42.github.io/energyefficiency_52sci/" target="_blank" rel="noopener"><img alt="방문자 수" src="https://hits.sh/leafyellow42.github.io/energyefficiency_52sci.svg?label=%EB%B0%A9%EB%AC%B8%EC%9E%90%20%EC%88%98&color=4f9a48" style="vertical-align:middle"></a></footer>
+
+<script src="village.js"></script>
+<script>
+const V=window.Village;
+const sky=()=>getComputedStyle(document.documentElement).getPropertyValue("--sky").trim();
+const pct=(p,W,H)=>`left:${p[0]/W*100}%;top:${p[1]/H*100}%`;
+const TRI='<svg viewBox="0 0 22 22" aria-hidden="true"><polygon points="2,3 20,3 11,19"/></svg>';
+let cur="map";
+const ro=w=>{const c=w.charCodeAt(w.length-1)-0xAC00, j=(c>=0&&c<11172)?c%28:0; return w+(j&&j!==8?"으로":"로");};
+
+let ANIM=null;
+function drawMapView(){
+  const info=V.drawMap(document.getElementById("c-map"),sky(),"ground");
+  V.drawMap(document.getElementById("c-obj"),sky(),"objects");
+  if(!ANIM){ ANIM=V.MapAnim(document.getElementById("c-sky"),document.getElementById("c-anim")); }
+  ANIM.draw();
+  document.getElementById("l-map").innerHTML=V.MAP_PLACES.map(p=>{
+    const st=pct(info.P(...p.at),info.W,info.H);
+    return `<button class="pin ${p.ready?"on":"off"}" data-place="${p.id}" style="${st}" title="${p.name}${p.ready?"":" (준비 중)"}" aria-label="${p.name}${p.ready?"":" (준비 중)"}">${TRI}</button>`;
+  }).join("");
+}
+function drawScene(id){
+  const S=V.SCENES[id], cv=document.getElementById("c-home");
+  document.getElementById("v-home").style.setProperty("--ar",`${S.W}/${S.H}`);
+  const info=S.draw(cv,sky());
+  BOX=contentBox(cv);
+  document.getElementById("l-home").innerHTML=S.items.map(it=>{
+    const st=pct(info.P(...it.at),info.W,info.H);
+    return it.href
+      ? `<a class="pin on" href="${it.href}" style="${st}" title="${it.name}" aria-label="${it.name}">${TRI}</a>`
+      : `<button class="pin off" data-soon="${it.name}" style="${st}" title="${it.name} (준비 중)" aria-label="${it.name} (준비 중)">${TRI}</button>`;
+  }).join("");
+}
+let BOX=null;
+function contentBox(cv){
+  const W=cv.width,H=cv.height,d=cv.getContext("2d").getImageData(0,0,W,H).data;
+  const k=((H-1)*W+(W-1))*4, sr=d[k],sg=d[k+1],sb=d[k+2];
+  let x0=W,y0=H,x1=-1,y1=-1; const pts=[];
+  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=(y*W+x)*4,r=d[i],g=d[i+1],b=d[i+2];
+    if(Math.abs(r-sr)+Math.abs(g-sg)+Math.abs(b-sb)<12) continue;
+    if((r===255&&g===255&&b===255)||(r===0xe3&&g===0xee&&b===0xf3)) continue; // clouds
+    if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; if(x%3===0&&y%3===0) pts.push(x,y);}
+  if(x1<0) return {x:0,y:0,w:W,h:H,pts};
+  const pad=8; x0=Math.max(0,x0-pad); y0=Math.max(0,y0-pad); x1=Math.min(W-1,x1+pad); y1=Math.min(H-1,y1+pad);
+  return {x:x0,y:y0,w:x1-x0+1,h:y1-y0+1,pts};
+}
+function fit(){
+  const tb=document.getElementById("title"), overlay=getComputedStyle(tb).position==="absolute";
+  [["v-map","c-map","l-map"],["v-home","c-home","l-home"]].forEach(([v,c,l])=>{
+    const view=document.getElementById(v); if(view.hidden) return;
+    const cv=document.getElementById(c), ly=document.getElementById(l);
+    let x,y,w,h;
+    if(v==="v-home" && BOX){
+      if(!overlay) view.style.setProperty("--ar",`${BOX.w}/${BOX.h}`);
+      const W=view.clientWidth, H=view.clientHeight;
+      let s, cx=W/2, cy;
+      if(overlay){
+        // largest size, centred in the whole stage, whose drawn pixels stay clear of the title box
+        const m=14, tl=tb.offsetLeft-m, tt=tb.offsetTop-m, tr=tb.offsetLeft+tb.offsetWidth+m, tbt=tb.offsetTop+tb.offsetHeight+m;
+        const top=12, Hav=H-tb.offsetHeight-16-12-top, sMin=Math.min(W*.96/BOX.w, Hav/BOX.h);
+        const sMax=Math.min(W*.96/BOX.w, (H-24)/BOX.h);
+        const clear=sc=>{ const ox=cx-(BOX.x+BOX.w/2)*sc, oy=H/2-(BOX.y+BOX.h/2)*sc, P=BOX.pts;
+          for(let i=0;i<P.length;i+=2){ const px=ox+P[i]*sc, py=oy+P[i+1]*sc; if(px>tl&&px<tr&&py>tt&&py<tbt) return false; } return true; };
+        s=null; for(let sc=sMax; sc>sMin; sc*=.97){ if(clear(sc)){ s=sc; break; } }
+        if(s) cy=H/2; else { s=sMin; cy=top+Hav/2; }
+      } else { s=Math.min(W/BOX.w, H/BOX.h); cy=H/2; }
+      w=cv.width*s; h=cv.height*s; x=cx-(BOX.x+BOX.w/2)*s; y=cy-(BOX.y+BOX.h/2)*s;
+    } else {
+      const W=view.clientWidth, H=view.clientHeight, s=Math.min(W/cv.width, H/cv.height);
+      w=cv.width*s; h=cv.height*s; x=(W-w)/2; y=(H-h)/2 - (v==="v-map" && overlay ? h*.11 : 0);
+    }
+    const els=v==="v-map"?[cv,ly,...["c-sky","c-anim","c-obj"].map(i=>document.getElementById(i))]:[cv,ly];
+    els.forEach(el=>Object.assign(el.style,{left:x+"px",top:y+"px",width:w+"px",height:h+"px"}));
+  });
+}
+
+const ICONS={
+ home:["....KK......","...KRRK.KK..","..KRRRRKKK..",".KRRRRRRK...","KRRRRRRRRK..",".KWWWWWWK...",".KWBBWDDK...",".KWBBWDDK...",".KWWWWDDK...",".KKKKKKKK...","GGGGGGGGGGGG"],
+ apt:["..KKKK......","..KSSK.KKKK.","..KBSK.KSSK.","..KSBK.KBSK.","..KBSK.KSBK.","..KSBK.KBSK.","..KBSK.KSSK.","..KSBK.KBSK.","..KBSK.KSBK.","..KSDK.KSDK.","GGGGGGGGGGGG"],
+ school:["......K.....","......KRR...","......KRR...","......K.....","KKKKKKKKKKKK","KWBWBWBWBWBK","KWWWWWWWWWWK","KWBWBYYBWBWK","KWWWWYYWWWWK","KKKKKKKKKKKK","OOOOOOOOOOOO"],
+ tower:["....KKKK....","....KYYK....","...KBBBBK...","...KBSBSK...","...KBBBBK...","...KBSBSK...","...KBBBBK...","..KKBSBSKK..","..KSSSSSSK..","..KSSDDSSK..","GGGGGGGGGGGG"],
+ roofs:["YY........YY",".YY..KK..YY.","....KNNK....","...KNNNNK...","..KRRRRRRK..",".KRRRRRRRRK.","..KWWWWWWK..","..KWBBWDDK..","..KWBBWDDK..","..KKKKKKKK..","GGGGGGGGGGGG"],
+ shop:["KKKKKKKKKKKK","KNNNNNNNNNNK","KNWWNWNWWNNK","KKKKKKKKKKKK","KBBBBKKBBBBK","KBSSBKKBSSBK","KBBBBKKBBBBK","KWWWWKKWWWWK","KWEEWKKWEEWK","KKKKKKKKKKKK","OOOOOOOOOOOO"],
+ recycle:["....GGGG....","...G....G...","..G......G..","..GG....GG..","............","KKKKKKKKKKKK","KSSSSSSSSSSK",".KSGGSSGGSK.",".KSGGSSGGSK.",".KSSSSSSSSK.",".KKKKKKKKKK."],
+ forest:["....GG......","...GLLG.....","..GLLLLG..G.","..GGLLGG.GLG",".GLLLLLLGGLG",".GGGLLGGGLLG","GLLLLLLLLGGG","GGGGTTGGG.T.","....TT....T.","....TT....T.","OOOOOOOOOOOO"]
+};
+const PAL={K:"#2b2c2f",R:"#d9534f",W:"#f7f4ec",B:"#7fb6dc",D:"#8a6040",G:"#4f9a48",L:"#86c76f",S:"#c9ced3",Y:"#f2c230",N:"#2f4a6b",O:"#c9a878",E:"#4f9a48",T:"#7a5232"};
+function iconSVG(id){const m=ICONS[id]; if(!m) return ""; let r="";
+  m.forEach((row,y)=>[...row].forEach((ch,x)=>{ if(PAL[ch]) r+=`<rect x="${x}" y="${y}" width="1" height="1" fill="${PAL[ch]}"/>`; }));
+  return `<svg class="picon" viewBox="0 0 12 11" shape-rendering="crispEdges" aria-hidden="true">${r}</svg>`;}
+const MAPT=`<p class="label">과학 탐구 활동 · 자원과 에너지</p><h1>자원·에너지의 효율적 활용</h1><p class="hint">깜빡이는 ▼ 표시를 눌러 들어가 보세요.</p>`;
+function show(view){
+  cur=view; const isMap=view==="map";
+  document.getElementById("v-map").hidden=!isMap;
+  document.getElementById("v-home").hidden=isMap;
+  if(isMap){ document.getElementById("title").innerHTML=MAPT; }
+  else { const S=V.SCENES[view]; drawScene(view);
+    document.getElementById("title").innerHTML=`<button type="button" id="back">← 마을로</button><h1 class="ph">${iconSVG(view)}<span>${S.name}</span></h1>`;
+    document.getElementById("back").onclick=()=>{show("map"); try{history.replaceState(null,"",location.pathname+location.search);}catch(e){}};
+    try{history.replaceState(null,"","#"+view);}catch(e){} }
+  fit();
+}
+let tt; function toast(msg){const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),1600);}
+function openPlace(id){ const p=V.MAP_PLACES.find(x=>x.id===id); if(!p) return; if(p.ready) show(id); else toast(`'${p.name}'은(는) 아직 준비 중이에요.`); }
+
+document.getElementById("l-map").addEventListener("click",e=>{const b=e.target.closest("[data-place]"); if(b) openPlace(b.dataset.place);});
+document.getElementById("l-home").addEventListener("click",e=>{const b=e.target.closest("[data-soon]"); if(b) toast(`'${b.dataset.soon}' 카드는 아직 준비 중이에요.`);});
+document.getElementById("list").innerHTML=V.MAP_PLACES.map(p=>`<button type="button" class="${p.ready?"":"off"}" data-place="${p.id}">${p.name}${p.ready?"":"<small>준비 중</small>"}</button>`).join("");
+document.getElementById("list").addEventListener("click",e=>{const b=e.target.closest("[data-place]"); if(b){openPlace(b.dataset.place); document.getElementById("stage").scrollIntoView({block:"start"});}});
+
+drawMapView();
+const h0=location.hash.slice(1);
+show(V.SCENES[h0]?h0:"map");
+addEventListener("resize",fit);
+const still=matchMedia("(prefers-reduced-motion: reduce)");
+let last=0; (function loop(ts){ requestAnimationFrame(loop); if(still.matches||cur!=="map"||document.hidden) return; if(ts-last<110) return; last=ts; ANIM.step(); ANIM.draw(); })(0);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{drawMapView(); if(cur!=="map") drawScene(cur);});
+</script>
+
+</body>
+</html>
